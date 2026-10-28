@@ -1,0 +1,27 @@
+# Author: Maifee Ul Asad <maifeeulasad@gmail.com>
+# Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
+#
+# Source: https://github.com/freelensapp/freelens-example-extension/blob/main/pnpm-workspace.yaml
+
+# Allow electron and @parcel/watcher to run build scripts; set esbuild to false
+# because the host-modules vite plugin loads esbuild at build time, not via
+# a native add-on, so its postinstall script is not needed.
+allowBuilds:
+  '@parcel/watcher': true
+  electron: true
+  esbuild: false
+
+engineStrict: true
+
+# Bypass the 1-day minimum release age for packages adopted together with a
+# Freelens release (they are pinned exactly, so the age gate only blocks new
+# installs, not updates).
+minimumReleaseAgeExclude:
+  - '@freelensapp/extensions'
+  - electron@44.10.0
+
+shellEmulator: true
+
+# Fail the install, not just warn, when a shared library is outside the peer
+# range declared by @freelensapp/extensions.
+strictPeerDependencies: true

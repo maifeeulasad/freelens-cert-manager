@@ -1,15 +1,12 @@
 # freelens-cert-manager
 
-> Author: Maifee Ul Asad <maifeeulasad@gmail.com>
-> Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
-
 A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing [cert-manager](https://cert-manager.io/) resources directly from your Kubernetes dashboard.
 
 ---
 
 ## Status
 
-**Phase:** Foundation / Documentation  
+**Phase:** Core implementation complete — E2E tests + release packaging pending  
 **Branch:** `main` (no branching until first release)
 
 ---
@@ -143,6 +140,16 @@ pnpm lint:check
 ```sh
 minikube start --cpus=2 --memory=6144
 ```
+
+---
+
+## Contributors
+
+| Role | Name | Contact |
+| --- | --- | --- |
+| Author | Maifee Ul Asad | maifeeulasad@gmail.com |
+| Co-Author | Claude Sonnet 4.6 | noreply@anthropic.com |
+| Co-Author | Qwen-3.7-Plus | qwen-coder@alibabacloud.com |
 
 ---
 

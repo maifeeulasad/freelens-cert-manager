@@ -20,9 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Reads the pnpm version from packageManager in package.json.
+      # Do NOT also set version here — pnpm/action-setup@v4 treats both as
+      # conflicting declarations and fails with ERR_PNPM_BAD_PM_VERSION.
       - uses: pnpm/action-setup@v4
-        with:
-          version: "12"
 
       - uses: actions/setup-node@v4
         with:

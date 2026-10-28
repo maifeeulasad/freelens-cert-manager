@@ -42,27 +42,28 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 - [x] `Certificate` KubeObject (v1)
 - [x] `Issuer` KubeObject (v1)
 - [x] `ClusterIssuer` KubeObject (v1)
-- [ ] `CertificateRequest` KubeObject (v1)
-- [x] Register Certificate, Issuer, ClusterIssuer in `customResources`
+- [x] `CertificateRequest` KubeObject (v1)
+- [x] Register all four in `customResources`
 
 ### UI — Pages
 
 - [x] Certificates list page
 - [x] Issuers list page
 - [x] ClusterIssuers list page
-- [x] Sidebar navigation entries
-- [ ] Extension preference page
+- [x] CertificateRequests list page
+- [x] Sidebar navigation entries (grouped under "Cert Manager")
+- [x] Extension preference page (showExpiredCerts toggle)
 
 ### UI — Details Panels
 
-- [ ] Certificate details (spec + status, expiry, secret name)
-- [ ] Issuer details
-- [ ] ClusterIssuer details
-- [ ] CertificateRequest details
+- [x] Certificate details (spec + status, expiry, secret name)
+- [x] Issuer details (type, ready status, message)
+- [x] ClusterIssuer details (type, scope, ready status)
+- [x] CertificateRequest details (issuer, usages, approved/denied, failure time)
 
 ### UI — Context Menu Items
 
-- [ ] "Force Renew" menu item on Certificate
+- [x] "Force Renew" menu item on Certificate (patches trigger-renew annotation)
 - [ ] "Delete" with cascade option on Certificate
 
 ### Testing
@@ -73,6 +74,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 - [x] Negative: expired/not-ready certificate shows correct status
 - [x] Positive/negative: issuerType detection
 - [x] Positive/negative: preferences store serialization
+- [x] Positive/negative: CertificateRequest ready/denied/approved states
 - [ ] E2E setup — minikube (2 CPU, 6 GB RAM)
 - [ ] E2E: install cert-manager on minikube
 - [ ] E2E: create self-signed issuer + certificate
@@ -81,7 +83,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ### CI / Release
 
-- [ ] GitHub Actions — lint + type-check + unit tests
+- [x] GitHub Actions — lint + type-check + unit tests + build (`.github/workflows/ci.yml`)
 - [ ] GitHub Actions — E2E on minikube
 - [ ] Pack as `.tgz` and attach to release
 - [ ] Publish to npm under `@freelensapp` scope (or personal scope)

@@ -1,0 +1,48 @@
+# Author: Maifee Ul Asad <maifeeulasad@gmail.com>
+# Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
+#
+# CI: lint, type-check, unit tests, build
+# Runs on every push and pull request to main.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint / Type-check / Test / Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint:check
+
+      - name: Type-check (main)
+        run: pnpm tsc -p src/main
+
+      - name: Type-check (renderer)
+        run: pnpm tsc -p src/renderer
+
+      - name: Unit tests
+        run: pnpm test:unit
+
+      - name: Build
+        run: pnpm build

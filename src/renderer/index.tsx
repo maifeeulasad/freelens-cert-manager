@@ -6,6 +6,10 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
 import { CertManagerPreferencesStore } from "../common/store";
+import { CertificateRequestDetails } from "./details/certificate-request-details";
+import { CertificateDetails } from "./details/certificate-details";
+import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
+import { IssuerDetails } from "./details/issuer-details";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
@@ -21,6 +25,25 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
   }
 
   customResources = [Certificate, CertificateRequest, Issuer, ClusterIssuer];
+
+  kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [
+    Renderer.K8sApi.detailsFor(Certificate, {
+      priority: 10,
+      Details: CertificateDetails as any,
+    }),
+    Renderer.K8sApi.detailsFor(CertificateRequest, {
+      priority: 10,
+      Details: CertificateRequestDetails as any,
+    }),
+    Renderer.K8sApi.detailsFor(Issuer, {
+      priority: 10,
+      Details: IssuerDetails as any,
+    }),
+    Renderer.K8sApi.detailsFor(ClusterIssuer, {
+      priority: 10,
+      Details: ClusterIssuerDetails as any,
+    }),
+  ];
 
   clusterPages: Renderer.LensExtension["clusterPages"] = [
     {

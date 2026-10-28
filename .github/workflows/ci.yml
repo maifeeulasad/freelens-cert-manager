@@ -1,7 +1,7 @@
 # Author: Maifee Ul Asad <maifeeulasad@gmail.com>
 # Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
 #
-# CI: lint, type-check, unit tests, build
+# CI: lint, type-check, unit tests, build, E2E tests (minikube)
 # Runs on every push and pull request to main.
 
 name: CI
@@ -47,3 +47,36 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  e2e:
+    name: E2E Tests (minikube + cert-manager)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          cpus: 2
+          memory: 6144
+
+      - name: Install cert-manager
+        run: |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
+          kubectl rollout status deployment/cert-manager -n cert-manager --timeout=120s
+          kubectl rollout status deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          kubectl rollout status deployment/cert-manager-cainjector -n cert-manager --timeout=120s
+
+      - name: E2E tests
+        run: pnpm test:e2e

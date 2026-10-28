@@ -33,6 +33,7 @@
     "dev:renderer": "vite build --watch --no-emptyOutDir",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "type:check": "tsc -p src/main && tsc -p src/renderer",
     "lint": "pnpm lint:check",
     "lint:check": "biome check",

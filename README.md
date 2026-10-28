@@ -6,7 +6,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ## Status
 
-**Phase:** Core implementation complete — E2E tests + release packaging pending  
+**Phase:** CI green — E2E tests + release packaging pending  
 **Branch:** `main` (no branching until first release)
 
 ---

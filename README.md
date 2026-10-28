@@ -6,7 +6,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ## Status
 
-**Phase:** CI green — E2E tests + release packaging pending  
+**Phase:** E2E tests done — release packaging pending  
 **Branch:** `main` (no branching until first release)
 
 ---
@@ -61,7 +61,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 ### UI — Context Menu Items
 
 - [x] "Force Renew" menu item on Certificate (patches trigger-renew annotation)
-- [ ] "Delete" with cascade option on Certificate
+- [x] "Delete (cascade)" menu item on Certificate (deletes cert + managed Secret)
 
 ### Testing
 
@@ -72,16 +72,17 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 - [x] Positive/negative: issuerType detection
 - [x] Positive/negative: preferences store serialization
 - [x] Positive/negative: CertificateRequest ready/denied/approved states
-- [ ] E2E setup — minikube (2 CPU, 6 GB RAM)
-- [ ] E2E: install cert-manager on minikube
-- [ ] E2E: create self-signed issuer + certificate
-- [ ] E2E: verify extension renders the certificate list
-- [ ] E2E: verify details panel shows correct expiry
+- [x] E2E setup — minikube (2 CPU, 6 GB RAM) — `scripts/e2e-setup.sh`
+- [x] E2E: install cert-manager on minikube
+- [x] E2E: create self-signed issuer + certificate
+- [x] E2E: verify Certificate becomes Ready + Secret is created
+- [x] E2E: verify delete cascade removes cert + Secret
+- [x] E2E: positive/negative Issuer (namespace-scoped) tests
 
 ### CI / Release
 
 - [x] GitHub Actions — lint + type-check + unit tests + build (`.github/workflows/ci.yml`)
-- [ ] GitHub Actions — E2E on minikube
+- [x] GitHub Actions — E2E on minikube (`medyagh/setup-minikube`)
 - [ ] Pack as `.tgz` and attach to release
 - [ ] Publish to npm under `@freelensapp` scope (or personal scope)
 

@@ -11,7 +11,7 @@
  * Ref: https://cert-manager.io/docs/usage/certificate/#cleaning-up-after-a-deleted-certificate
  */
 
-import { Common, Renderer } from "@freelensapp/extensions";
+import { Renderer } from "@freelensapp/extensions";
 import { Certificate } from "../../common/api";
 
 interface Props {
@@ -35,7 +35,7 @@ export function CertificateDeleteCascadeMenuItem({ object: cert }: Props) {
           await certApi.delete({ name, namespace: ns });
 
           if (secretName) {
-            const secretApi = Common.K8sApi.apiManager.getApiByKind("Secret", "v1") as any;
+            const secretApi = Renderer.K8sApi.apiManager.getApiByKind("Secret", "v1") as any;
             if (secretApi) {
               await secretApi.delete({ name: secretName, namespace: ns });
             }

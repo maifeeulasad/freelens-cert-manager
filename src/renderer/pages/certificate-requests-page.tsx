@@ -16,21 +16,11 @@ export function CertificateRequestsPage() {
       tableId="cert-manager-certificate-requests"
       className="CertificateRequestsPage"
       renderTableHeader={[
-        <Renderer.Component.TableCell key="name" className="name">
-          Name
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="namespace" className="namespace">
-          Namespace
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="ready" className="ready">
-          Ready
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="approved" className="approved">
-          Approved
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="issuer" className="issuer">
-          Issuer
-        </Renderer.Component.TableCell>,
+        { title: "Name", className: "name" },
+        { title: "Namespace", className: "namespace" },
+        { title: "Ready", className: "ready" },
+        { title: "Approved", className: "approved" },
+        { title: "Issuer", className: "issuer" },
       ]}
       renderTableContents={(cr) => [
         cr.getName(),

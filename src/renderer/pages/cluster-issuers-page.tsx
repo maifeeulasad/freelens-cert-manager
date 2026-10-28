@@ -16,15 +16,9 @@ export function ClusterIssuersPage() {
       tableId="cert-manager-cluster-issuers"
       className="ClusterIssuersPage"
       renderTableHeader={[
-        <Renderer.Component.TableCell key="name" className="name">
-          Name
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="ready" className="ready">
-          Ready
-        </Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="type" className="type">
-          Type
-        </Renderer.Component.TableCell>,
+        { title: "Name", className: "name" },
+        { title: "Ready", className: "ready" },
+        { title: "Type", className: "type" },
       ]}
       renderTableContents={(issuer) => [
         issuer.getName(),

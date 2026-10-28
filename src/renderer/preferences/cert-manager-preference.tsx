@@ -7,7 +7,7 @@ import { observer } from "mobx-react";
 import { CertManagerPreferencesStore } from "../../common/store";
 
 export const CertManagerPreferenceInput = observer(function CertManagerPreferenceInput() {
-  const store = CertManagerPreferencesStore.getInstanceOrCreate();
+  const store = CertManagerPreferencesStore.getInstanceOrCreate() as CertManagerPreferencesStore;
 
   return (
     <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>

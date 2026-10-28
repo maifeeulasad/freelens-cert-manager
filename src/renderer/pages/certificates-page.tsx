@@ -4,18 +4,18 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate } from "../../common/api";
+import { Certificate, type CertificateApi } from "../../common/api";
 
 export function CertificatesPage() {
-  const store = Certificate.getStore();
+  const store = Certificate.getStore<Certificate>();
 
   return (
-    <Renderer.Component.KubeObjectListLayout
+    <Renderer.Component.KubeObjectListLayout<Certificate, CertificateApi>
       store={store}
       isConfigurable
       tableId="cert-manager-certificates"
       className="CertificatesPage"
-      renderTableHeader={() => [
+      renderTableHeader={[
         <Renderer.Component.TableCell key="name" className="name">
           Name
         </Renderer.Component.TableCell>,
@@ -32,7 +32,7 @@ export function CertificatesPage() {
           Expires
         </Renderer.Component.TableCell>,
       ]}
-      renderTableContents={(cert: Certificate) => [
+      renderTableContents={(cert) => [
         cert.getName(),
         cert.getNs(),
         cert.isReady ? "✓" : "✗",

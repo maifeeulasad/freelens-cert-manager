@@ -4,18 +4,18 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { ClusterIssuer } from "../../common/api";
+import { ClusterIssuer, type ClusterIssuerApi } from "../../common/api";
 
 export function ClusterIssuersPage() {
-  const store = ClusterIssuer.getStore();
+  const store = ClusterIssuer.getStore<ClusterIssuer>();
 
   return (
-    <Renderer.Component.KubeObjectListLayout
+    <Renderer.Component.KubeObjectListLayout<ClusterIssuer, ClusterIssuerApi>
       store={store}
       isConfigurable
       tableId="cert-manager-cluster-issuers"
       className="ClusterIssuersPage"
-      renderTableHeader={() => [
+      renderTableHeader={[
         <Renderer.Component.TableCell key="name" className="name">
           Name
         </Renderer.Component.TableCell>,
@@ -26,7 +26,7 @@ export function ClusterIssuersPage() {
           Type
         </Renderer.Component.TableCell>,
       ]}
-      renderTableContents={(issuer: ClusterIssuer) => [
+      renderTableContents={(issuer) => [
         issuer.getName(),
         issuer.isReady ? "✓" : "✗",
         issuer.issuerType,

@@ -10,6 +10,8 @@ import { CertificateRequestDetails } from "./details/certificate-request-details
 import { CertificateDetails } from "./details/certificate-details";
 import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
 import { IssuerDetails } from "./details/issuer-details";
+import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
+import { CertManagerPreferenceHint, CertManagerPreferenceInput } from "./preferences/cert-manager-preference";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
@@ -70,6 +72,22 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
         Page: () => <CertificateRequestsPage extension={this} />,
       },
     },
+  ];
+
+  appPreferences = [
+    {
+      title: "Cert Manager",
+      components: {
+        Input: () => <CertManagerPreferenceInput />,
+        Hint: () => <CertManagerPreferenceHint />,
+      },
+    },
+  ];
+
+  kubeObjectMenuItems: Renderer.LensExtension["kubeObjectMenuItems"] = [
+    Renderer.K8sApi.menuItemFor(Certificate, {
+      MenuItem: CertificateForceRenewMenuItem as any,
+    }),
   ];
 
   clusterPageMenus = [

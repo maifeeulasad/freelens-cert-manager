@@ -4,7 +4,6 @@
 # Node.js
 node_modules/
 dist/
-build/
 .cache/
 
 # Environment

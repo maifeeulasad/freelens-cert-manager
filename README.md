@@ -26,28 +26,31 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ### Extension Scaffold
 
-- [ ] `package.json` with correct engines, type:module, devDependencies
-- [ ] `tsconfig.json` (base + per-process configs)
-- [ ] `vite.config.mjs` (two-mode build: renderer + main)
-- [ ] `src/main/index.ts` — `Main.LensExtension` subclass
-- [ ] `src/renderer/index.tsx` — `Renderer.LensExtension` subclass
-- [ ] `src/common/store/` — shared MobX preferences store
-- [ ] Biome lint config
+- [x] `package.json` with correct engines, type:module, devDependencies
+- [x] `tsconfig.json` (base + per-process configs)
+- [x] `vite.config.mjs` (two-mode build: renderer + main)
+- [x] `src/main/index.ts` — `Main.LensExtension` subclass
+- [x] `src/renderer/index.tsx` — `Renderer.LensExtension` subclass
+- [x] `src/common/store/` — shared MobX preferences store
+- [x] Biome lint config
+- [x] `build/` — vite plugins: host-modules, standard-decorators
+- [x] `test/freelens-extensions.ts` — unit test stub for host API
+- [x] `vitest.config.ts`
 
 ### cert-manager Custom Resources
 
-- [ ] `Certificate` KubeObject (v1)
-- [ ] `Issuer` KubeObject (v1)
-- [ ] `ClusterIssuer` KubeObject (v1)
+- [x] `Certificate` KubeObject (v1)
+- [x] `Issuer` KubeObject (v1)
+- [x] `ClusterIssuer` KubeObject (v1)
 - [ ] `CertificateRequest` KubeObject (v1)
-- [ ] Register all in `customResources`
+- [x] Register Certificate, Issuer, ClusterIssuer in `customResources`
 
 ### UI — Pages
 
-- [ ] Certificates list page
-- [ ] Issuers list page
-- [ ] ClusterIssuers list page
-- [ ] Sidebar navigation entries
+- [x] Certificates list page
+- [x] Issuers list page
+- [x] ClusterIssuers list page
+- [x] Sidebar navigation entries
 - [ ] Extension preference page
 
 ### UI — Details Panels
@@ -64,10 +67,12 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ### Testing
 
-- [ ] Unit tests — cert-manager KubeObject models (Vitest)
-- [ ] Unit tests — MobX store (Vitest)
-- [ ] Positive: certificate shows as ready
-- [ ] Negative: expired/not-ready certificate shows correct status
+- [x] Unit tests — cert-manager KubeObject models (Vitest)
+- [x] Unit tests — MobX store (Vitest)
+- [x] Positive: certificate shows as ready
+- [x] Negative: expired/not-ready certificate shows correct status
+- [x] Positive/negative: issuerType detection
+- [x] Positive/negative: preferences store serialization
 - [ ] E2E setup — minikube (2 CPU, 6 GB RAM)
 - [ ] E2E: install cert-manager on minikube
 - [ ] E2E: create self-signed issuer + certificate

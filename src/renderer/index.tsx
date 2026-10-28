@@ -10,6 +10,7 @@ import { CertificateDetails } from "./details/certificate-details";
 import { CertificateRequestDetails } from "./details/certificate-request-details";
 import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
 import { IssuerDetails } from "./details/issuer-details";
+import { CertificateDeleteCascadeMenuItem } from "./menus/certificate-delete-cascade-menu-item";
 import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
@@ -86,6 +87,9 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
   kubeObjectMenuItems: Renderer.LensExtension["kubeObjectMenuItems"] = [
     Renderer.K8sApi.menuItemFor(Certificate, {
       MenuItem: CertificateForceRenewMenuItem as any,
+    }),
+    Renderer.K8sApi.menuItemFor(Certificate, {
+      MenuItem: CertificateDeleteCascadeMenuItem as any,
     }),
   ];
 

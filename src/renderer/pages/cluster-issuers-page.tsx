@@ -6,11 +6,7 @@
 import { Renderer } from "@freelensapp/extensions";
 import { ClusterIssuer } from "../../common/api";
 
-interface Props {
-  extension: Renderer.LensExtension;
-}
-
-export function ClusterIssuersPage(_props: Props) {
+export function ClusterIssuersPage() {
   const store = ClusterIssuer.getStore();
 
   return (

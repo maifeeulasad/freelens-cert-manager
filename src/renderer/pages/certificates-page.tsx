@@ -6,11 +6,7 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate } from "../../common/api";
 
-interface Props {
-  extension: Renderer.LensExtension;
-}
-
-export function CertificatesPage(_props: Props) {
+export function CertificatesPage() {
   const store = Certificate.getStore();
 
   return (

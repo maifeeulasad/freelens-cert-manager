@@ -8,36 +8,55 @@
 
 import { Renderer } from "@freelensapp/extensions";
 
-export class ClusterIssuer extends Renderer.K8sApi.KubeObject {
-  static readonly apiBase = "/apis/cert-manager.io/v1/clusterissuers";
+export interface ClusterIssuerSpec {
+  acme?: unknown;
+  ca?: unknown;
+  selfSigned?: unknown;
+  vault?: unknown;
+  venafi?: unknown;
+}
+
+export interface ClusterIssuerStatus {
+  conditions?: Array<{ type: string; status: string; message?: string }>;
+}
+
+export class ClusterIssuer extends Renderer.K8sApi.LensExtensionKubeObject<
+  Renderer.K8sApi.KubeObjectMetadata,
+  ClusterIssuerStatus,
+  ClusterIssuerSpec
+> {
+  declare kind: "ClusterIssuer";
+  declare apiVersion: "cert-manager.io/v1";
+
   static readonly kind = "ClusterIssuer";
   static readonly namespaced = false;
-  static readonly objectConstructor = ClusterIssuer;
+  static readonly apiBase = "/apis/cert-manager.io/v1/clusterissuers";
 
-  static readonly crd = {
-    group: "cert-manager.io",
-    version: "v1",
-    resource: "clusterissuers",
+  static readonly crd: Renderer.K8sApi.LensExtensionKubeObjectCRD & { title: string } = {
+    apiVersions: ["cert-manager.io/v1"],
+    plural: "clusterissuers",
+    singular: "clusterissuer",
+    shortNames: [],
     title: "ClusterIssuers",
   };
 
   get isReady(): boolean {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.some((c) => c.type === "Ready" && c.status === "True");
+    return (this.status?.conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
   }
 
   get readyMessage(): string | undefined {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.find((c) => c.type === "Ready")?.message;
+    return (this.status?.conditions ?? []).find((c) => c.type === "Ready")?.message;
   }
 
   get issuerType(): string {
-    const spec = this.spec as any;
-    if (spec?.acme) return "ACME";
-    if (spec?.ca) return "CA";
-    if (spec?.selfSigned) return "SelfSigned";
-    if (spec?.vault) return "Vault";
-    if (spec?.venafi) return "Venafi";
+    if (this.spec.acme) return "ACME";
+    if (this.spec.ca) return "CA";
+    if (this.spec.selfSigned) return "SelfSigned";
+    if (this.spec.vault) return "Vault";
+    if (this.spec.venafi) return "Venafi";
     return "Unknown";
   }
 }
+
+export class ClusterIssuerApi extends Renderer.K8sApi.KubeApi<ClusterIssuer> {}
+export class ClusterIssuerStore extends Renderer.K8sApi.KubeObjectStore<ClusterIssuer, ClusterIssuerApi> {}

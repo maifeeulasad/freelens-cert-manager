@@ -6,11 +6,7 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Issuer } from "../../common/api";
 
-interface Props {
-  extension: Renderer.LensExtension;
-}
-
-export function IssuersPage(_props: Props) {
+export function IssuersPage() {
   const store = Issuer.getStore();
 
   return (

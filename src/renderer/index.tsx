@@ -50,25 +50,25 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     {
       id: "cert-manager-certificates",
       components: {
-        Page: () => <CertificatesPage extension={this} />,
+        Page: () => <CertificatesPage />,
       },
     },
     {
       id: "cert-manager-issuers",
       components: {
-        Page: () => <IssuersPage extension={this} />,
+        Page: () => <IssuersPage />,
       },
     },
     {
       id: "cert-manager-cluster-issuers",
       components: {
-        Page: () => <ClusterIssuersPage extension={this} />,
+        Page: () => <ClusterIssuersPage />,
       },
     },
     {
       id: "cert-manager-certificate-requests",
       components: {
-        Page: () => <CertificateRequestsPage extension={this} />,
+        Page: () => <CertificateRequestsPage />,
       },
     },
   ];

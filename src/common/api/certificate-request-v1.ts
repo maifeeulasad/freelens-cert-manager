@@ -8,57 +8,75 @@
 
 import { Renderer } from "@freelensapp/extensions";
 
-export class CertificateRequest extends Renderer.K8sApi.KubeObject {
-  static readonly apiBase = "/apis/cert-manager.io/v1/certificaterequests";
+export interface CertificateRequestSpec {
+  issuerRef?: { name: string; kind: string; group?: string };
+  duration?: string;
+  isCA?: boolean;
+  usages?: string[];
+  request?: string;
+}
+
+export interface CertificateRequestStatus {
+  failureTime?: string;
+  conditions?: Array<{ type: string; status: string; message?: string }>;
+}
+
+export class CertificateRequest extends Renderer.K8sApi.LensExtensionKubeObject<
+  Renderer.K8sApi.KubeObjectMetadata,
+  CertificateRequestStatus,
+  CertificateRequestSpec
+> {
+  declare kind: "CertificateRequest";
+  declare apiVersion: "cert-manager.io/v1";
+
   static readonly kind = "CertificateRequest";
   static readonly namespaced = true;
-  static readonly objectConstructor = CertificateRequest;
+  static readonly apiBase = "/apis/cert-manager.io/v1/certificaterequests";
 
-  static readonly crd = {
-    group: "cert-manager.io",
-    version: "v1",
-    resource: "certificaterequests",
+  static readonly crd: Renderer.K8sApi.LensExtensionKubeObjectCRD & { title: string } = {
+    apiVersions: ["cert-manager.io/v1"],
+    plural: "certificaterequests",
+    singular: "certificaterequest",
+    shortNames: ["cr"],
     title: "CertificateRequests",
   };
 
   get issuerRef(): { name: string; kind: string; group?: string } | undefined {
-    return (this.spec as any)?.issuerRef;
+    return this.spec.issuerRef;
   }
 
   get duration(): string | undefined {
-    return (this.spec as any)?.duration;
+    return this.spec.duration;
   }
 
   get isCA(): boolean {
-    return (this.spec as any)?.isCA === true;
+    return this.spec.isCA === true;
   }
 
   get usages(): string[] {
-    return (this.spec as any)?.usages ?? [];
+    return this.spec.usages ?? [];
   }
 
-  // Status fields
   get isReady(): boolean {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.some((c) => c.type === "Ready" && c.status === "True");
+    return (this.status?.conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
   }
 
   get isDenied(): boolean {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.some((c) => c.type === "Denied" && c.status === "True");
+    return (this.status?.conditions ?? []).some((c) => c.type === "Denied" && c.status === "True");
   }
 
   get isApproved(): boolean {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.some((c) => c.type === "Approved" && c.status === "True");
+    return (this.status?.conditions ?? []).some((c) => c.type === "Approved" && c.status === "True");
   }
 
   get failureTime(): string | undefined {
-    return (this.status as any)?.failureTime;
+    return this.status?.failureTime;
   }
 
   get readyMessage(): string | undefined {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.find((c) => c.type === "Ready")?.message;
+    return (this.status?.conditions ?? []).find((c) => c.type === "Ready")?.message;
   }
 }
+
+export class CertificateRequestApi extends Renderer.K8sApi.KubeApi<CertificateRequest> {}
+export class CertificateRequestStore extends Renderer.K8sApi.KubeObjectStore<CertificateRequest, CertificateRequestApi> {}

@@ -8,63 +8,86 @@
 
 import { Renderer } from "@freelensapp/extensions";
 
-export class Certificate extends Renderer.K8sApi.KubeObject {
-  static readonly apiBase = "/apis/cert-manager.io/v1/certificates";
+export interface CertificateSpec {
+  secretName?: string;
+  commonName?: string;
+  dnsNames?: string[];
+  issuerRef?: { name: string; kind: string; group?: string };
+  duration?: string;
+  renewBefore?: string;
+}
+
+export interface CertificateStatus {
+  notAfter?: string;
+  notBefore?: string;
+  renewalTime?: string;
+  conditions?: Array<{ type: string; status: string; message?: string }>;
+}
+
+export class Certificate extends Renderer.K8sApi.LensExtensionKubeObject<
+  Renderer.K8sApi.KubeObjectMetadata,
+  CertificateStatus,
+  CertificateSpec
+> {
+  declare kind: "Certificate";
+  declare apiVersion: "cert-manager.io/v1";
+
   static readonly kind = "Certificate";
   static readonly namespaced = true;
-  static readonly objectConstructor = Certificate;
+  static readonly apiBase = "/apis/cert-manager.io/v1/certificates";
 
-  static readonly crd = {
-    group: "cert-manager.io",
-    version: "v1",
-    resource: "certificates",
+  static readonly crd: Renderer.K8sApi.LensExtensionKubeObjectCRD & { title: string } = {
+    apiVersions: ["cert-manager.io/v1"],
+    plural: "certificates",
+    singular: "certificate",
+    shortNames: ["cert"],
     title: "Certificates",
   };
 
   get secretName(): string | undefined {
-    return (this.spec as any)?.secretName;
+    return this.spec.secretName;
   }
 
   get commonName(): string | undefined {
-    return (this.spec as any)?.commonName;
+    return this.spec.commonName;
   }
 
   get dnsNames(): string[] {
-    return (this.spec as any)?.dnsNames ?? [];
+    return this.spec.dnsNames ?? [];
   }
 
   get issuerRef(): { name: string; kind: string; group?: string } | undefined {
-    return (this.spec as any)?.issuerRef;
+    return this.spec.issuerRef;
   }
 
   get duration(): string | undefined {
-    return (this.spec as any)?.duration;
+    return this.spec.duration;
   }
 
   get renewBefore(): string | undefined {
-    return (this.spec as any)?.renewBefore;
+    return this.spec.renewBefore;
   }
 
-  // Status fields
   get notAfter(): string | undefined {
-    return (this.status as any)?.notAfter;
+    return this.status?.notAfter;
   }
 
   get notBefore(): string | undefined {
-    return (this.status as any)?.notBefore;
+    return this.status?.notBefore;
   }
 
   get renewalTime(): string | undefined {
-    return (this.status as any)?.renewalTime;
+    return this.status?.renewalTime;
   }
 
   get isReady(): boolean {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.some((c) => c.type === "Ready" && c.status === "True");
+    return (this.status?.conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
   }
 
   get readyMessage(): string | undefined {
-    const conditions: any[] = (this.status as any)?.conditions ?? [];
-    return conditions.find((c) => c.type === "Ready")?.message;
+    return (this.status?.conditions ?? []).find((c) => c.type === "Ready")?.message;
   }
 }
+
+export class CertificateApi extends Renderer.K8sApi.KubeApi<Certificate> {}
+export class CertificateStore extends Renderer.K8sApi.KubeObjectStore<Certificate, CertificateApi> {}

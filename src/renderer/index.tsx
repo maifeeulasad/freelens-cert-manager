@@ -4,8 +4,9 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate, ClusterIssuer, Issuer } from "../common/api";
+import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
 import { CertManagerPreferencesStore } from "../common/store";
+import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
 import { IssuersPage } from "./pages/issuers-page";
@@ -19,7 +20,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     CertManagerPreferencesStore.getInstance()?.disposeExtension(this);
   }
 
-  customResources = [Certificate, Issuer, ClusterIssuer];
+  customResources = [Certificate, CertificateRequest, Issuer, ClusterIssuer];
 
   clusterPages: Renderer.LensExtension["clusterPages"] = [
     {
@@ -38,6 +39,12 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       id: "cert-manager-cluster-issuers",
       components: {
         Page: () => <ClusterIssuersPage extension={this} />,
+      },
+    },
+    {
+      id: "cert-manager-certificate-requests",
+      components: {
+        Page: () => <CertificateRequestsPage extension={this} />,
       },
     },
   ];
@@ -75,6 +82,15 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       target: { pageId: "cert-manager-cluster-issuers" },
       components: {
         Icon: () => <span>🌐</span>,
+      },
+    },
+    {
+      id: "cert-manager-certificate-requests",
+      parentId: "cert-manager",
+      title: CertificateRequest.crd.title,
+      target: { pageId: "cert-manager-certificate-requests" },
+      components: {
+        Icon: () => <span>📋</span>,
       },
     },
   ];

@@ -61,6 +61,7 @@ export const Renderer = {
     KubeObjectListLayout,
   },
   K8sApi: {
+    KubeObject: LensExtensionKubeObject,
     LensExtensionKubeObject,
     KubeApi: class KubeApi {},
     KubeObjectStore: class KubeObjectStore {},

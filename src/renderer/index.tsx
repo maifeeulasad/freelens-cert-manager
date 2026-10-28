@@ -25,10 +25,6 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     CertManagerPreferencesStore.getInstanceOrCreate().loadExtension(this);
   }
 
-  async onDeactivate() {
-    CertManagerPreferencesStore.getInstance()?.disposeExtension(this);
-  }
-
   customResources = [Certificate, CertificateRequest, Issuer, ClusterIssuer];
 
   kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [

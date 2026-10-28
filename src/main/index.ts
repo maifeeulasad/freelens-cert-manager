@@ -10,8 +10,4 @@ export default class CertManagerMain extends Main.LensExtension {
   async onActivate() {
     await CertManagerPreferencesStore.getInstanceOrCreate().loadExtension(this);
   }
-
-  async onDeactivate() {
-    CertManagerPreferencesStore.getInstance()?.disposeExtension(this);
-  }
 }

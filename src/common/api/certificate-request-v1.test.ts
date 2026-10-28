@@ -39,7 +39,9 @@ describe("CertificateRequest", () => {
     });
 
     it("returns isCA true when set (positive)", () => {
-      expect(makeCR({ spec: { isCA: true, issuerRef: { name: "ca", kind: "Issuer" } } }).isCA).toBe(true);
+      expect(makeCR({ spec: { isCA: true, issuerRef: { name: "ca", kind: "Issuer" } } }).isCA).toBe(
+        true,
+      );
     });
 
     it("returns usages (positive)", () => {

@@ -94,7 +94,9 @@ export function hostModules(processName) {
       return [
         `const hostModule = ${hostGlobal}.${globalName(moduleId)};`,
         "export default hostModule;",
-        ...names.map((name) => `export const ${name} = /* @__PURE__ */ Reflect.get(hostModule, "${name}");`),
+        ...names.map(
+          (name) => `export const ${name} = /* @__PURE__ */ Reflect.get(hostModule, "${name}");`,
+        ),
         "",
       ].join("\n");
     },

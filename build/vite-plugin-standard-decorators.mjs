@@ -22,7 +22,11 @@ export function standardDecorators() {
     async transform(code, id) {
       const path = id.split("?", 1)[0];
 
-      if (!typeScriptModule.test(path) || path.includes("/node_modules/") || !decoratorAtLineStart.test(code)) {
+      if (
+        !typeScriptModule.test(path) ||
+        path.includes("/node_modules/") ||
+        !decoratorAtLineStart.test(code)
+      ) {
         return null;
       }
 

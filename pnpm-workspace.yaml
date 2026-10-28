@@ -7,7 +7,7 @@
 # because the host-modules vite plugin loads esbuild at build time, not via
 # a native add-on, so its postinstall script is not needed.
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   electron: true
   esbuild: false
 
@@ -17,7 +17,7 @@ engineStrict: true
 # Freelens release (they are pinned exactly, so the age gate only blocks new
 # installs, not updates).
 minimumReleaseAgeExclude:
-  - '@freelensapp/extensions'
+  - "@freelensapp/extensions"
   - electron@44.10.0
 
 shellEmulator: true

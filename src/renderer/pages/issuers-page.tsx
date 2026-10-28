@@ -20,10 +20,18 @@ export function IssuersPage(_props: Props) {
       tableId="cert-manager-issuers"
       className="IssuersPage"
       renderTableHeader={() => [
-        <Renderer.Component.TableCell key="name" className="name">Name</Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="namespace" className="namespace">Namespace</Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="ready" className="ready">Ready</Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="type" className="type">Type</Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="name" className="name">
+          Name
+        </Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="namespace" className="namespace">
+          Namespace
+        </Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="ready" className="ready">
+          Ready
+        </Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="type" className="type">
+          Type
+        </Renderer.Component.TableCell>,
       ]}
       renderTableContents={(issuer: Issuer) => [
         issuer.getName(),

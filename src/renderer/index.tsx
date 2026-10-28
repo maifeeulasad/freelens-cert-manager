@@ -6,16 +6,19 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
 import { CertManagerPreferencesStore } from "../common/store";
-import { CertificateRequestDetails } from "./details/certificate-request-details";
 import { CertificateDetails } from "./details/certificate-details";
+import { CertificateRequestDetails } from "./details/certificate-request-details";
 import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
 import { IssuerDetails } from "./details/issuer-details";
 import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
-import { CertManagerPreferenceHint, CertManagerPreferenceInput } from "./preferences/cert-manager-preference";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
 import { IssuersPage } from "./pages/issuers-page";
+import {
+  CertManagerPreferenceHint,
+  CertManagerPreferenceInput,
+} from "./preferences/cert-manager-preference";
 
 export default class CertManagerRenderer extends Renderer.LensExtension {
   async onActivate() {

@@ -35,13 +35,14 @@
     "test:unit": "vitest run",
     "type:check": "tsc -p src/main && tsc -p src/renderer",
     "lint": "pnpm lint:check",
-    "lint:check": "pnpm biome check",
-    "lint:fix": "pnpm biome check --fix",
+    "lint:check": "biome check",
+    "lint:fix": "biome check --fix",
     "clean": "pnpm dlx shx@0.4.0 rm -rf dist",
     "pack:dev": "pnpm version --no-commit-hooks --no-git-checks --no-git-tag-version prerelease && pnpm build && pnpm clean:tgz && pnpm pack",
     "clean:tgz": "pnpm dlx shx@0.4.0 rm -f \"*.tgz\""
   },
   "devDependencies": {
+    "@biomejs/biome": "2.6.3",
     "@freelensapp/extensions": "2.0.0",
     "@testing-library/dom": "10.4.2",
     "@testing-library/react": "16.3.3",

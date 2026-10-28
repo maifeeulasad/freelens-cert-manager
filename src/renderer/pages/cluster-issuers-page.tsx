@@ -20,9 +20,15 @@ export function ClusterIssuersPage(_props: Props) {
       tableId="cert-manager-cluster-issuers"
       className="ClusterIssuersPage"
       renderTableHeader={() => [
-        <Renderer.Component.TableCell key="name" className="name">Name</Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="ready" className="ready">Ready</Renderer.Component.TableCell>,
-        <Renderer.Component.TableCell key="type" className="type">Type</Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="name" className="name">
+          Name
+        </Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="ready" className="ready">
+          Ready
+        </Renderer.Component.TableCell>,
+        <Renderer.Component.TableCell key="type" className="type">
+          Type
+        </Renderer.Component.TableCell>,
       ]}
       renderTableContents={(issuer: ClusterIssuer) => [
         issuer.getName(),

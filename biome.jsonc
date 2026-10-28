@@ -24,7 +24,7 @@
     }
   },
   "files": {
-    "ignore": ["dist/**", "node_modules/**", ".study/**", "coverage/**"]
+    "includes": ["**", "!dist", "!node_modules", "!.study", "!coverage"]
   },
   "formatter": {
     "enabled": true,
@@ -35,7 +35,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "preset": "recommended"
     }
   },
   "javascript": {

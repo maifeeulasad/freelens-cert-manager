@@ -89,28 +89,28 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ## Known Issues / Limitations
 
-*(none yet)*
+_(none yet)_
 
 ---
 
 ## Architecture Decisions
 
-| Decision | Rationale |
-| --- | --- |
-| Freelens v2 extension API | Current stable host version |
-| Vite two-mode build | Required by Freelens v2 (renderer ESM-only, main Node) |
-| MobX 7 standard decorators | Host ships MobX 7; legacy decorators break silently |
-| React 19 | Host-provided singleton; must not be bundled |
-| pnpm | Matches Freelens example extension toolchain |
-| Biome | Linter/formatter used by freelensapp org |
+| Decision                   | Rationale                                              |
+| -------------------------- | ------------------------------------------------------ |
+| Freelens v2 extension API  | Current stable host version                            |
+| Vite two-mode build        | Required by Freelens v2 (renderer ESM-only, main Node) |
+| MobX 7 standard decorators | Host ships MobX 7; legacy decorators break silently    |
+| React 19                   | Host-provided singleton; must not be bundled           |
+| pnpm                       | Matches Freelens example extension toolchain           |
+| Biome                      | Linter/formatter used by freelensapp org               |
 
 ---
 
 ## Documentation
 
-| File | Purpose |
-| --- | --- |
-| [`docs/understanding-cert-manager.md`](docs/understanding-cert-manager.md) | kubectl + cmctl command reference for cert-manager |
+| File                                                                         | Purpose                                                          |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`docs/understanding-cert-manager.md`](docs/understanding-cert-manager.md)   | kubectl + cmctl command reference for cert-manager               |
 | [`docs/extension-development-guide.md`](docs/extension-development-guide.md) | Freelens v2 extension API — structure, contracts, build, testing |
 
 ---
@@ -145,11 +145,11 @@ minikube start --cpus=2 --memory=6144
 
 ## Contributors
 
-| Role | Name | Contact |
-| --- | --- | --- |
-| Author | Maifee Ul Asad | maifeeulasad@gmail.com |
-| Co-Author | Claude Sonnet 4.6 | noreply@anthropic.com |
-| Co-Author | Qwen-3.7-Plus | qwen-coder@alibabacloud.com |
+| Role      | Name              | Contact                     |
+| --------- | ----------------- | --------------------------- |
+| Author    | Maifee Ul Asad    | maifeeulasad@gmail.com      |
+| Co-Author | Claude Sonnet 4.6 | noreply@anthropic.com       |
+| Co-Author | Qwen-3.7-Plus     | qwen-coder@alibabacloud.com |
 
 ---
 

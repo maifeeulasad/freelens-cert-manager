@@ -50,7 +50,9 @@ function KubeObjectListLayout({ store, renderTableContents }: KubeObjectListLayo
   return React.createElement(
     "div",
     null,
-    store.items.map((item, index) => React.createElement("div", { key: index }, ...renderTableContents(item))),
+    store.items.map((item, index) =>
+      React.createElement("div", { key: index }, ...renderTableContents(item)),
+    ),
   );
 }
 

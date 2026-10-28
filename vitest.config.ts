@@ -11,10 +11,7 @@ import { defineConfig } from "vitest/config";
 import { standardDecorators } from "./build/vite-plugin-standard-decorators.mjs";
 
 export default defineConfig({
-  plugins: [
-    standardDecorators(),
-    react(),
-  ],
+  plugins: [standardDecorators(), react()],
   test: {
     environment: "node",
     globals: true,
@@ -24,7 +21,9 @@ export default defineConfig({
     alias: {
       // The real package reads globalThis.FreelensExtensionApi which doesn't
       // exist in a Vitest process. Redirect to the test stub instead.
-      "@freelensapp/extensions": fileURLToPath(new URL("./test/freelens-extensions.ts", import.meta.url)),
+      "@freelensapp/extensions": fileURLToPath(
+        new URL("./test/freelens-extensions.ts", import.meta.url),
+      ),
     },
   },
 });

@@ -1,8 +1,8 @@
-Author: 
- - Maifee Ul Asad
- - Qwen 3.7 Plus
+Author:
+- Maifee Ul Asad
+- Qwen 3.7 Plus
 
-To work with **cert-manager** in Kubernetes, it is important to understand that cert-manager is a Kubernetes controller/operator. It does not have its own standalone database; instead, it extends the Kubernetes API using **Custom Resource Definitions (CRDs)**. 
+To work with **cert-manager** in Kubernetes, it is important to understand that cert-manager is a Kubernetes controller/operator. It does not have its own standalone database; instead, it extends the Kubernetes API using **Custom Resource Definitions (CRDs)**.
 
 Therefore, you will use two primary tools to interact with it:
 1. **`kubectl`**: For standard **CRUD** (Create, Read, Update, Delete) operations on cert-manager resources.
@@ -15,11 +15,12 @@ Here is the comprehensive documentation for all commands, arguments, and flags.
 # PART 1: `kubectl` (CRUD Operations)
 
 Cert-manager introduces several Custom Resources (CRs). The most common ones you will interact with are:
-*   `issuer` / `clusterissuer`: Defines *who* can issue certificates (e.g., Let's Encrypt, Vault, SelfSigned).
-*   `certificate`: Defines *what* certificate you want (domain names, secret name to store it in).
-*   `certificaterequest`: The actual request sent to the Issuer (usually created automatically by the `certificate` controller).
+-   `issuer` / `clusterissuer`: Defines _who_ can issue certificates (e.g., Let's Encrypt, Vault, SelfSigned).
+-   `certificate`: Defines _what_ certificate you want (domain names, secret name to store it in).
+-   `certificaterequest`: The actual request sent to the Issuer (usually created automatically by the `certificate` controller).
 
 ### 1. CREATE (Applying Configurations)
+
 Because cert-manager resources are complex, they are almost always created via YAML manifests.
 
 ```bash
@@ -34,6 +35,7 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 ```
 
 ### 2. READ (Viewing Resources)
+
 ```bash
 # List all certificates in the current namespace
 kubectl get certificates
@@ -60,14 +62,16 @@ kubectl get challenges
 ```
 
 #### Highly Useful `kubectl` Arguments/Flags for Cert-Manager:
-*   `-o wide` or `--output=wide`: **Essential for certificates.** Shows the `READY` status, `SECRET NAME`, and `EXPIRATION DATE` in the list view.
-    *   *Example:* `kubectl get cert -o wide`
-*   `-o yaml` or `--output=yaml`: Outputs the full resource definition. Great for seeing the exact state and conditions.
-*   `-o jsonpath='{.status.conditions[0].message}'`: Extracts specific error messages from a failing certificate.
-*   `-w` or `--watch`: Watches the resource in real-time. Great for watching a `challenge` or `certificaterequest` complete.
-*   `-n <namespace>` or `--namespace=<namespace>`: Targets a specific namespace. (Note: `ClusterIssuer` is cluster-wide and ignores this flag).
+
+-   `-o wide` or `--output=wide`: **Essential for certificates.** Shows the `READY` status, `SECRET NAME`, and `EXPIRATION DATE` in the list view.
+    -   _Example:_ `kubectl get cert -o wide`
+-   `-o yaml` or `--output=yaml`: Outputs the full resource definition. Great for seeing the exact state and conditions.
+-   `-o jsonpath='{.status.conditions[0].message}'`: Extracts specific error messages from a failing certificate.
+-   `-w` or `--watch`: Watches the resource in real-time. Great for watching a `challenge` or `certificaterequest` complete.
+-   `-n <namespace>` or `--namespace=<namespace>`: Targets a specific namespace. (Note: `ClusterIssuer` is cluster-wide and ignores this flag).
 
 ### 3. UPDATE (Modifying Resources)
+
 ```bash
 # Open the resource in your default terminal editor (vi/nano) to update it
 kubectl edit certificate <cert-name>
@@ -81,6 +85,7 @@ kubectl label certificate <cert-name> environment=production
 ```
 
 ### 4. DELETE (Removing Resources)
+
 ```bash
 # Delete a specific certificate (This will NOT delete the underlying Kubernetes Secret by default)
 kubectl delete certificate <cert-name>
@@ -100,9 +105,10 @@ kubectl delete secret <secret-name>
 
 `cmctl` is the official command-line tool for cert-manager. It is used for tasks that `kubectl` cannot do easily, like inspecting TLS secrets, forcing renewals, and checking API health.
 
-*(If you don't have it installed, install it via Homebrew: `brew install cmctl`, or download the binary from the cert-manager GitHub releases).*
+_(If you don't have it installed, install it via Homebrew: `brew install cmctl`, or download the binary from the cert-manager GitHub releases)._
 
 ### 1. Health and Status Checks
+
 ```bash
 # Check if the cert-manager API is ready and functioning
 cmctl check api
@@ -118,6 +124,7 @@ cmctl status certificate <cert-name> -n <namespace>
 ```
 
 ### 2. Certificate Management (Renewals & Creation)
+
 ```bash
 # Manually force a certificate to renew immediately (bypasses the renewal window)
 cmctl renew <cert-name>
@@ -140,6 +147,7 @@ cmctl create certificaterequest <request-name> \
 ```
 
 ### 3. Inspection and Debugging
+
 ```bash
 # Inspect a Kubernetes Secret that contains a TLS certificate
 # This parses the x509 cert and shows issuer, expiry, SANs, etc.
@@ -154,12 +162,13 @@ cmctl convert <filename.yaml>
 ```
 
 #### `cmctl` Global Arguments/Flags:
+
 These flags can be appended to almost any `cmctl` command:
-*   `-n <namespace>` or `--namespace=<namespace>`: Specify the namespace.
-*   `--context=<context>`: Use a specific kubeconfig context (if you have multiple clusters).
-*   `--kubeconfig=<path>`: Path to a specific kubeconfig file.
-*   `-v` or `--verbose`: Enable verbose logging for debugging.
-*   `-h` or `--help`: Show help for any command.
+-   `-n <namespace>` or `--namespace=<namespace>`: Specify the namespace.
+-   `--context=<context>`: Use a specific kubeconfig context (if you have multiple clusters).
+-   `--kubeconfig=<path>`: Path to a specific kubeconfig file.
+-   `-v` or `--verbose`: Enable verbose logging for debugging.
+-   `-h` or `--help`: Show help for any command.
 
 ---
 
@@ -168,6 +177,7 @@ These flags can be appended to almost any `cmctl` command:
 When cert-manager fails, it is usually due to DNS challenges, RBAC issues, or webhook failures. Here are the commands to troubleshoot those specific scenarios.
 
 ### 1. Checking Controller Logs
+
 If a certificate is stuck in `Ready: False`, you need to see what the cert-manager controller is thinking.
 
 ```bash
@@ -185,6 +195,7 @@ kubectl logs -n cert-manager deployment/cert-manager-cainjector -f
 ```
 
 ### 2. Checking Kubernetes Events
+
 Cert-manager posts events to the Kubernetes event stream when it encounters errors (like failing an HTTP-01 or DNS-01 challenge).
 
 ```bash
@@ -196,6 +207,7 @@ kubectl get events | grep cert-manager
 ```
 
 ### 3. Debugging ACME Challenges (Let's Encrypt)
+
 If Let's Encrypt is failing to verify your domain, you need to look at the `Challenge` resource.
 
 ```bash
@@ -210,6 +222,7 @@ kubectl describe challenge <challenge-name>
 ```
 
 ### 4. Verifying RBAC and Service Accounts
+
 Sometimes cert-manager fails because it doesn't have permission to create secrets or read ingress resources.
 
 ```bash
@@ -224,12 +237,12 @@ kubectl get rolebindings -n <namespace> | grep cert-manager
 
 ### Summary Cheat Sheet for Daily Use
 
-| Task | Command |
-| :--- | :--- |
-| **Check if cert-manager is healthy** | `cmctl check api` |
-| **List all certs with expiry dates** | `kubectl get cert -A -o wide` |
-| **Debug a failing cert** | `kubectl describe cert <name>` |
-| **Force a cert to renew now** | `cmctl renew <name>` |
-| **Check why Let's Encrypt failed** | `kubectl describe challenge <name>` |
-| **Inspect a TLS secret** | `cmctl inspect secret <secret-name>` |
-| **View controller errors** | `kubectl logs -n cert-manager deploy/cert-manager --tail=100` |
+| Task                                 | Command                                                       |
+| :----------------------------------- | :------------------------------------------------------------ |
+| **Check if cert-manager is healthy** | `cmctl check api`                                             |
+| **List all certs with expiry dates** | `kubectl get cert -A -o wide`                                 |
+| **Debug a failing cert**             | `kubectl describe cert <name>`                                |
+| **Force a cert to renew now**        | `cmctl renew <name>`                                          |
+| **Check why Let's Encrypt failed**   | `kubectl describe challenge <name>`                           |
+| **Inspect a TLS secret**             | `cmctl inspect secret <secret-name>`                          |
+| **View controller errors**           | `kubectl logs -n cert-manager deploy/cert-manager --tail=100` |

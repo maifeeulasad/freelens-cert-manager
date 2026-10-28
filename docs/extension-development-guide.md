@@ -185,7 +185,9 @@ export default class MyCertManagerRenderer extends Renderer.LensExtension {
   ];
 
   // Register custom CRDs with the Kubernetes API
-  customResources = [/* CertificateV1, IssuerV1, ... */];
+  customResources = [
+    /* CertificateV1, IssuerV1, ... */
+  ];
 }
 ```
 
@@ -270,7 +272,8 @@ export class CertManagerPreferencesStore extends Common.Store.ExtensionStore<{
   }
 }
 
-export const certManagerPreferencesStore = CertManagerPreferencesStore.getInstance<CertManagerPreferencesStore>();
+export const certManagerPreferencesStore =
+  CertManagerPreferencesStore.getInstance<CertManagerPreferencesStore>();
 ```
 
 ---
@@ -310,17 +313,17 @@ minikube start --cpus=2 --memory=6144
 
 ## Toolchain Summary
 
-| Tool         | Version | Purpose                          |
-| ------------ | ------- | -------------------------------- |
-| Node         | ≥ 24    | Runtime                          |
-| pnpm         | 12.x    | Package manager                  |
-| TypeScript   | 7.x     | Language                         |
-| Vite         | 8.x     | Bundler (two-pass build)         |
-| Vitest       | 5.x     | Unit + integration tests         |
-| Playwright   | 1.64+   | E2E tests                        |
-| Biome        | 2.6+    | Linter + formatter               |
-| React        | 19.x    | UI (host-provided)               |
-| MobX         | 7.x     | State (host-provided, ESM deco)  |
+| Tool       | Version | Purpose                         |
+| ---------- | ------- | ------------------------------- |
+| Node       | ≥ 24    | Runtime                         |
+| pnpm       | 12.x    | Package manager                 |
+| TypeScript | 7.x     | Language                        |
+| Vite       | 8.x     | Bundler (two-pass build)        |
+| Vitest     | 5.x     | Unit + integration tests        |
+| Playwright | 1.64+   | E2E tests                       |
+| Biome      | 2.6+    | Linter + formatter              |
+| React      | 19.x    | UI (host-provided)              |
+| MobX       | 7.x     | State (host-provided, ESM deco) |
 
 ---
 

@@ -36,7 +36,9 @@ const noNodeInRenderer = {
   enforce: "pre",
   resolveId(source, importer) {
     if (isBuiltin(source) || source === "electron" || source.startsWith("electron/")) {
-      this.error(`"${source}" is imported by ${importer}, but renderer code gets no Node or Electron`);
+      this.error(
+        `"${source}" is imported by ${importer}, but renderer code gets no Node or Electron`,
+      );
     }
     return null;
   },
@@ -58,7 +60,10 @@ export default defineConfig(({ mode }) => {
           define: { "process.env.NODE_ENV": JSON.stringify("production") },
         }
       : {
-          resolve: { conditions: [...defaultServerConditions], mainFields: [...defaultServerMainFields] },
+          resolve: {
+            conditions: [...defaultServerConditions],
+            mainFields: [...defaultServerMainFields],
+          },
           define: { __dirname: "import.meta.dirname", __filename: "import.meta.filename" },
         }),
     build: {

@@ -4,7 +4,8 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate } from "../../common/api";
+
+import type { Certificate } from "../../common/api";
 
 interface Props {
   object: Certificate;

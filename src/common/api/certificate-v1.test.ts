@@ -23,7 +23,9 @@ function makeCert(overrides: Record<string, unknown> = {}): Certificate {
       notAfter: "2026-12-01T00:00:00Z",
       notBefore: "2026-09-01T00:00:00Z",
       renewalTime: "2026-11-01T00:00:00Z",
-      conditions: [{ type: "Ready", status: "True", message: "Certificate is up to date and has not expired" }],
+      conditions: [
+        { type: "Ready", status: "True", message: "Certificate is up to date and has not expired" },
+      ],
     },
     ...overrides,
   } as any);

@@ -59,4 +59,7 @@ export class ClusterIssuer extends Renderer.K8sApi.LensExtensionKubeObject<
 }
 
 export class ClusterIssuerApi extends Renderer.K8sApi.KubeApi<ClusterIssuer> {}
-export class ClusterIssuerStore extends Renderer.K8sApi.KubeObjectStore<ClusterIssuer, ClusterIssuerApi> {}
+export class ClusterIssuerStore extends Renderer.K8sApi.KubeObjectStore<
+  ClusterIssuer,
+  ClusterIssuerApi
+> {}

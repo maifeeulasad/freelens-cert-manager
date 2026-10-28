@@ -90,4 +90,7 @@ export class Certificate extends Renderer.K8sApi.LensExtensionKubeObject<
 }
 
 export class CertificateApi extends Renderer.K8sApi.KubeApi<Certificate> {}
-export class CertificateStore extends Renderer.K8sApi.KubeObjectStore<Certificate, CertificateApi> {}
+export class CertificateStore extends Renderer.K8sApi.KubeObjectStore<
+  Certificate,
+  CertificateApi
+> {}

@@ -6,8 +6,10 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
 
-type DetailsComponent = Renderer.LensExtension["kubeObjectDetailItems"][number]["components"]["Details"];
-type MenuItemComponent = Renderer.LensExtension["kubeObjectMenuItems"][number]["components"]["MenuItem"];
+type DetailsComponent =
+  Renderer.LensExtension["kubeObjectDetailItems"][number]["components"]["Details"];
+type MenuItemComponent =
+  Renderer.LensExtension["kubeObjectMenuItems"][number]["components"]["MenuItem"];
 
 import { CertManagerPreferencesStore } from "../common/store";
 import { CertificateDetails } from "./details/certificate-details";

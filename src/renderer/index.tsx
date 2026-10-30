@@ -8,6 +8,7 @@ import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../commo
 
 type DetailsComponent = Renderer.LensExtension["kubeObjectDetailItems"][number]["Details"];
 type MenuItemComponent = Renderer.LensExtension["kubeObjectMenuItems"][number]["MenuItem"];
+
 import { CertManagerPreferencesStore } from "../common/store";
 import { CertificateDetails } from "./details/certificate-details";
 import { CertificateRequestDetails } from "./details/certificate-request-details";

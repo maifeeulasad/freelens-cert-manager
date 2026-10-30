@@ -12,7 +12,9 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate, CertificateStore } from "../../common/api";
+import { Certificate } from "../../common/api";
+
+import type { CertificateStore } from "../../common/api";
 
 interface Props {
   object: Certificate;

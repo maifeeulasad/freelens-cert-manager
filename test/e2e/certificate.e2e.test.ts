@@ -9,14 +9,16 @@
  */
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import {
-  applyManifest,
-  deleteResource,
-  getResource,
-  kubectl,
-  resourceExists,
-  waitFor,
-} from "./helpers";
+import { applyManifest, deleteResource, getResource, resourceExists, waitFor } from "./helpers";
+
+type KubeCondition = { type: string; status: string; message?: string };
+type KubeStatus = { conditions?: KubeCondition[]; notAfter?: string; [key: string]: unknown };
+type CertSpec = {
+  secretName: string;
+  commonName: string;
+  dnsNames: string[];
+  issuerRef: { kind: string; name: string };
+};
 
 const NS = "cert-manager-e2e";
 
@@ -77,12 +79,13 @@ describe("ClusterIssuer (self-signed)", () => {
   it("positive: ClusterIssuer exists and is Ready", async () => {
     await waitFor(() => {
       const obj = getResource("clusterissuer", "e2e-selfsigned");
-      const conditions: any[] = (obj?.status as any)?.conditions ?? [];
+      const conditions = (obj?.status as KubeStatus)?.conditions ?? [];
       return conditions.some((c) => c.type === "Ready" && c.status === "True");
     }, 60_000);
-    const obj = getResource("clusterissuer", "e2e-selfsigned")!;
-    const conditions: any[] = (obj.status as any).conditions;
-    expect(conditions.find((c: any) => c.type === "Ready")?.status).toBe("True");
+    const obj = getResource("clusterissuer", "e2e-selfsigned");
+    if (!obj) throw new Error("ClusterIssuer not found after waitFor");
+    const conditions = (obj.status as KubeStatus).conditions ?? [];
+    expect(conditions.find((c) => c.type === "Ready")?.status).toBe("True");
   });
 });
 
@@ -94,17 +97,19 @@ describe("Certificate lifecycle", () => {
   it("positive: Certificate becomes Ready within 60s", async () => {
     await waitFor(() => {
       const obj = getResource("certificate", "e2e-cert", NS);
-      const conditions: any[] = (obj?.status as any)?.conditions ?? [];
+      const conditions = (obj?.status as KubeStatus)?.conditions ?? [];
       return conditions.some((c) => c.type === "Ready" && c.status === "True");
     }, 60_000);
-    const obj = getResource("certificate", "e2e-cert", NS)!;
-    const conditions: any[] = (obj.status as any).conditions;
-    expect(conditions.find((c: any) => c.type === "Ready")?.status).toBe("True");
+    const obj = getResource("certificate", "e2e-cert", NS);
+    if (!obj) throw new Error("Certificate not found after waitFor");
+    const conditions = (obj.status as KubeStatus).conditions ?? [];
+    expect(conditions.find((c) => c.type === "Ready")?.status).toBe("True");
   });
 
   it("positive: cert-manager creates the managed Secret", async () => {
     await waitFor(() => resourceExists("secret", "e2e-cert-tls", NS), 60_000);
-    const secret = getResource("secret", "e2e-cert-tls", NS)!;
+    const secret = getResource("secret", "e2e-cert-tls", NS);
+    if (!secret) throw new Error("Secret not found after waitFor");
     expect(secret.type).toBe("kubernetes.io/tls");
     const data = secret.data as Record<string, string>;
     expect(data).toHaveProperty("tls.crt");
@@ -112,8 +117,9 @@ describe("Certificate lifecycle", () => {
   });
 
   it("positive: Certificate spec matches what we applied", () => {
-    const obj = getResource("certificate", "e2e-cert", NS)!;
-    const spec = obj.spec as any;
+    const obj = getResource("certificate", "e2e-cert", NS);
+    if (!obj) throw new Error("Certificate not found");
+    const spec = obj.spec as CertSpec;
     expect(spec.secretName).toBe("e2e-cert-tls");
     expect(spec.commonName).toBe("e2e.example.com");
     expect(spec.dnsNames).toContain("e2e.example.com");
@@ -122,10 +128,11 @@ describe("Certificate lifecycle", () => {
   });
 
   it("positive: Certificate has notAfter set in status", () => {
-    const obj = getResource("certificate", "e2e-cert", NS)!;
-    const status = obj.status as any;
+    const obj = getResource("certificate", "e2e-cert", NS);
+    if (!obj) throw new Error("Certificate not found");
+    const status = obj.status as KubeStatus;
     expect(status.notAfter).toBeTruthy();
-    expect(new Date(status.notAfter).getTime()).toBeGreaterThan(Date.now());
+    expect(new Date(status.notAfter ?? "").getTime()).toBeGreaterThan(Date.now());
   });
 });
 
@@ -152,7 +159,7 @@ spec:
   it("positive: cascade cert becomes Ready", async () => {
     await waitFor(() => {
       const obj = getResource("certificate", certName, NS);
-      const conditions: any[] = (obj?.status as any)?.conditions ?? [];
+      const conditions = (obj?.status as KubeStatus)?.conditions ?? [];
       return conditions.some((c) => c.type === "Ready" && c.status === "True");
     }, 60_000);
   });
@@ -205,7 +212,7 @@ spec:
   it("positive: Issuer is Ready", async () => {
     await waitFor(() => {
       const obj = getResource("issuer", issuerName, NS);
-      const conditions: any[] = (obj?.status as any)?.conditions ?? [];
+      const conditions = (obj?.status as KubeStatus)?.conditions ?? [];
       return conditions.some((c) => c.type === "Ready" && c.status === "True");
     }, 30_000);
   });

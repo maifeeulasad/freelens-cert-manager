@@ -63,7 +63,15 @@ jobs:
         run: pnpm pack
 
       - name: Publish to npm with provenance
-        run: pnpm publish --provenance --no-git-checks --access public
+        run: |
+          output=$(pnpm publish --provenance --no-git-checks --access public 2>&1) && echo "$output" || {
+            if echo "$output" | grep -q "previously published"; then
+              echo "Version already published on npm — skipping publish, continuing to attach .tgz."
+            else
+              echo "$output" >&2
+              exit 1
+            fi
+          }
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

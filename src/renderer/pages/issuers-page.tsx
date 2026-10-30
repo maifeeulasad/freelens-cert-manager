@@ -6,9 +6,15 @@
 import { Renderer } from "@freelensapp/extensions";
 import { Issuer, type IssuerApi } from "../../common/api";
 import { getIssuerType, isIssuerReady } from "../../common/api/accessors";
+import { NotInstalled } from "./not-installed";
 
 export function IssuersPage() {
-  const store = Issuer.getStore<Issuer>();
+  let store: ReturnType<typeof Issuer.getStore<Issuer>>;
+  try {
+    store = Issuer.getStore<Issuer>();
+  } catch {
+    return <NotInstalled resource="Issuer" />;
+  }
 
   return (
     <Renderer.Component.KubeObjectListLayout<Issuer, IssuerApi>

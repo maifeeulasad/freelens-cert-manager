@@ -11,9 +11,15 @@ import {
   isCertReqDenied,
   isCertReqReady,
 } from "../../common/api/accessors";
+import { NotInstalled } from "./not-installed";
 
 export function CertificateRequestsPage() {
-  const store = CertificateRequest.getStore<CertificateRequest>();
+  let store: ReturnType<typeof CertificateRequest.getStore<CertificateRequest>>;
+  try {
+    store = CertificateRequest.getStore<CertificateRequest>();
+  } catch {
+    return <NotInstalled resource="CertificateRequest" />;
+  }
 
   return (
     <Renderer.Component.KubeObjectListLayout<CertificateRequest, CertificateRequestApi>

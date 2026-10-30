@@ -23,8 +23,15 @@ function certIsReady(obj: Renderer.K8sApi.KubeObject): boolean {
   return (certStatus(obj).conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
 }
 
+import { NotInstalled } from "./not-installed";
+
 export function CertificatesPage() {
-  const store = Certificate.getStore<Certificate>();
+  let store: ReturnType<typeof Certificate.getStore<Certificate>>;
+  try {
+    store = Certificate.getStore<Certificate>();
+  } catch {
+    return <NotInstalled resource="Certificate" />;
+  }
 
   return (
     <Renderer.Component.KubeObjectListLayout<Certificate, CertificateApi>

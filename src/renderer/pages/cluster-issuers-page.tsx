@@ -6,9 +6,15 @@
 import { Renderer } from "@freelensapp/extensions";
 import { ClusterIssuer, type ClusterIssuerApi } from "../../common/api";
 import { getClusterIssuerType, isClusterIssuerReady } from "../../common/api/accessors";
+import { NotInstalled } from "./not-installed";
 
 export function ClusterIssuersPage() {
-  const store = ClusterIssuer.getStore<ClusterIssuer>();
+  let store: ReturnType<typeof ClusterIssuer.getStore<ClusterIssuer>>;
+  try {
+    store = ClusterIssuer.getStore<ClusterIssuer>();
+  } catch {
+    return <NotInstalled resource="ClusterIssuer" />;
+  }
 
   return (
     <Renderer.Component.KubeObjectListLayout<ClusterIssuer, ClusterIssuerApi>

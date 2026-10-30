@@ -1,5 +1,5 @@
 {
-  "name": "@freelensapp/freelens-cert-manager",
+  "name": "freelens-cert-manager",
   "version": "0.1.0",
   "description": "Freelens v2 extension for managing cert-manager resources",
   "repository": {

@@ -4,7 +4,24 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate, type CertificateApi } from "../../common/api";
+import {
+  Certificate,
+  type CertificateApi,
+  type CertificateSpec,
+  type CertificateStatus,
+} from "../../common/api";
+
+function certSpec(obj: Renderer.K8sApi.KubeObject): CertificateSpec {
+  return (obj as unknown as { spec: CertificateSpec }).spec ?? {};
+}
+
+function certStatus(obj: Renderer.K8sApi.KubeObject): CertificateStatus {
+  return (obj as unknown as { status: CertificateStatus }).status ?? {};
+}
+
+function certIsReady(obj: Renderer.K8sApi.KubeObject): boolean {
+  return (certStatus(obj).conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
+}
 
 export function CertificatesPage() {
   const store = Certificate.getStore<Certificate>();
@@ -25,9 +42,9 @@ export function CertificatesPage() {
       renderTableContents={(cert) => [
         cert.getName(),
         cert.getNs(),
-        cert.isReady ? "✓" : "✗",
-        cert.secretName ?? "-",
-        cert.notAfter ?? "-",
+        certIsReady(cert) ? "✓" : "✗",
+        certSpec(cert).secretName ?? "-",
+        certStatus(cert).notAfter ?? "-",
       ]}
     />
   );

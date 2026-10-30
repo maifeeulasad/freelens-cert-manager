@@ -13,6 +13,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate } from "../../common/api";
+import { getCertSpec } from "../../common/api/accessors";
 
 import type { CertificateStore } from "../../common/api";
 
@@ -24,7 +25,7 @@ export function CertificateDeleteCascadeMenuItem({ object: cert }: Props) {
   function handleDeleteCascade() {
     const ns = cert.getNs();
     const name = cert.getName();
-    const secretName = cert.secretName;
+    const secretName = getCertSpec(cert).secretName;
 
     Renderer.Component.ConfirmDialog.open({
       message: secretName

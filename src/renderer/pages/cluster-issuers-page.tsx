@@ -5,6 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { ClusterIssuer, type ClusterIssuerApi } from "../../common/api";
+import { getClusterIssuerType, isClusterIssuerReady } from "../../common/api/accessors";
 
 export function ClusterIssuersPage() {
   const store = ClusterIssuer.getStore<ClusterIssuer>();
@@ -22,8 +23,8 @@ export function ClusterIssuersPage() {
       ]}
       renderTableContents={(issuer) => [
         issuer.getName(),
-        issuer.isReady ? "✓" : "✗",
-        issuer.issuerType,
+        isClusterIssuerReady(issuer) ? "✓" : "✗",
+        getClusterIssuerType(issuer),
       ]}
     />
   );

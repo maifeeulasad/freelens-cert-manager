@@ -4,6 +4,13 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
+import {
+  getCertReqSpec,
+  getCertReqStatus,
+  isCertReqApproved,
+  isCertReqDenied,
+  isCertReqReady,
+} from "../../common/api/accessors";
 
 import type { CertificateRequest } from "../../common/api";
 
@@ -12,44 +19,47 @@ interface Props {
 }
 
 export function CertificateRequestDetails({ object: cr }: Props) {
+  const spec = getCertReqSpec(cr);
+  const status = getCertReqStatus(cr);
+  const usages = spec.usages ?? [];
+  const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
+
   return (
     <Renderer.Component.DrawerItem name="CertificateRequest Details" labelsOnly>
       <Renderer.Component.DrawerItem name="Issuer">
-        {cr.issuerRef ? `${cr.issuerRef.kind}/${cr.issuerRef.name}` : "-"}
+        {spec.issuerRef ? `${spec.issuerRef.kind}/${spec.issuerRef.name}` : "-"}
       </Renderer.Component.DrawerItem>
 
       <Renderer.Component.DrawerItem name="Duration">
-        {cr.duration ?? "-"}
+        {spec.duration ?? "-"}
       </Renderer.Component.DrawerItem>
 
       <Renderer.Component.DrawerItem name="Is CA">
-        {cr.isCA ? "Yes" : "No"}
+        {spec.isCA ? "Yes" : "No"}
       </Renderer.Component.DrawerItem>
 
-      {cr.usages.length > 0 && (
+      {usages.length > 0 && (
         <Renderer.Component.DrawerItem name="Usages">
-          {cr.usages.join(", ")}
+          {usages.join(", ")}
         </Renderer.Component.DrawerItem>
       )}
 
       <Renderer.Component.DrawerItem name="Status">
-        {cr.isReady ? "✓ Ready" : cr.isDenied ? "✗ Denied" : "⏳ Pending"}
+        {isCertReqReady(cr) ? "✓ Ready" : isCertReqDenied(cr) ? "✗ Denied" : "⏳ Pending"}
       </Renderer.Component.DrawerItem>
 
       <Renderer.Component.DrawerItem name="Approved">
-        {cr.isApproved ? "Yes" : "No"}
+        {isCertReqApproved(cr) ? "Yes" : "No"}
       </Renderer.Component.DrawerItem>
 
-      {cr.failureTime && (
+      {status.failureTime && (
         <Renderer.Component.DrawerItem name="Failed At">
-          {cr.failureTime}
+          {status.failureTime}
         </Renderer.Component.DrawerItem>
       )}
 
-      {cr.readyMessage && (
-        <Renderer.Component.DrawerItem name="Message">
-          {cr.readyMessage}
-        </Renderer.Component.DrawerItem>
+      {readyMessage && (
+        <Renderer.Component.DrawerItem name="Message">{readyMessage}</Renderer.Component.DrawerItem>
       )}
     </Renderer.Component.DrawerItem>
   );

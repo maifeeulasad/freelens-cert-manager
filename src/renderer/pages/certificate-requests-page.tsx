@@ -5,6 +5,12 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { CertificateRequest, type CertificateRequestApi } from "../../common/api";
+import {
+  getCertReqSpec,
+  isCertReqApproved,
+  isCertReqDenied,
+  isCertReqReady,
+} from "../../common/api/accessors";
 
 export function CertificateRequestsPage() {
   const store = CertificateRequest.getStore<CertificateRequest>();
@@ -22,13 +28,16 @@ export function CertificateRequestsPage() {
         { title: "Approved", className: "approved" },
         { title: "Issuer", className: "issuer" },
       ]}
-      renderTableContents={(cr) => [
-        cr.getName(),
-        cr.getNs(),
-        cr.isReady ? "✓" : "✗",
-        cr.isApproved ? "✓" : cr.isDenied ? "Denied" : "-",
-        cr.issuerRef ? `${cr.issuerRef.kind}/${cr.issuerRef.name}` : "-",
-      ]}
+      renderTableContents={(cr) => {
+        const issuerRef = getCertReqSpec(cr).issuerRef;
+        return [
+          cr.getName(),
+          cr.getNs(),
+          isCertReqReady(cr) ? "✓" : "✗",
+          isCertReqApproved(cr) ? "✓" : isCertReqDenied(cr) ? "Denied" : "-",
+          issuerRef ? `${issuerRef.kind}/${issuerRef.name}` : "-",
+        ];
+      }}
     />
   );
 }

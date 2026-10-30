@@ -5,6 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { Issuer, type IssuerApi } from "../../common/api";
+import { getIssuerType, isIssuerReady } from "../../common/api/accessors";
 
 export function IssuersPage() {
   const store = Issuer.getStore<Issuer>();
@@ -24,8 +25,8 @@ export function IssuersPage() {
       renderTableContents={(issuer) => [
         issuer.getName(),
         issuer.getNs(),
-        issuer.isReady ? "✓" : "✗",
-        issuer.issuerType,
+        isIssuerReady(issuer) ? "✓" : "✗",
+        getIssuerType(issuer),
       ]}
     />
   );

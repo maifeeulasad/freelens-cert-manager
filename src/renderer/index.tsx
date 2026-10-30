@@ -17,7 +17,11 @@ import { CertificateRequestDetails } from "./details/certificate-request-details
 import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
 import { IssuerDetails } from "./details/issuer-details";
 import { CertificateDeleteCascadeMenuItem } from "./menus/certificate-delete-cascade-menu-item";
+import { CertificateEditMenuItem } from "./menus/certificate-edit-menu-item";
 import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
+import { CertificateRequestEditMenuItem } from "./menus/certificate-request-edit-menu-item";
+import { ClusterIssuerEditMenuItem } from "./menus/cluster-issuer-edit-menu-item";
+import { IssuerEditMenuItem } from "./menus/issuer-edit-menu-item";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
@@ -96,6 +100,18 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     }),
     Renderer.K8sApi.menuItemFor(Certificate, {
       MenuItem: CertificateDeleteCascadeMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Certificate, {
+      MenuItem: CertificateEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Issuer, {
+      MenuItem: IssuerEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(ClusterIssuer, {
+      MenuItem: ClusterIssuerEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(CertificateRequest, {
+      MenuItem: CertificateRequestEditMenuItem as unknown as MenuItemComponent,
     }),
   ];
 

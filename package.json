@@ -1,6 +1,6 @@
 {
   "name": "freelens-cert-manager",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Freelens v2 extension for managing cert-manager resources",
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "@freelensapp/extensions": "2.0.0",
     "@testing-library/dom": "10.4.2",
     "@testing-library/react": "16.3.3",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
@@ -71,5 +72,8 @@
     "freelensapp",
     "freelens"
   ],
-  "packageManager": "pnpm@12.15.0"
+  "packageManager": "pnpm@12.15.0",
+  "dependencies": {
+    "js-yaml": "^5.5.0"
+  }
 }

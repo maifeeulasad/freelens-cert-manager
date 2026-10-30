@@ -5,6 +5,9 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
+
+type DetailsComponent = Renderer.LensExtension["kubeObjectDetailItems"][number]["Details"];
+type MenuItemComponent = Renderer.LensExtension["kubeObjectMenuItems"][number]["MenuItem"];
 import { CertManagerPreferencesStore } from "../common/store";
 import { CertificateDetails } from "./details/certificate-details";
 import { CertificateRequestDetails } from "./details/certificate-request-details";
@@ -31,19 +34,19 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
   kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [
     Renderer.K8sApi.detailsFor(Certificate, {
       priority: 10,
-      Details: CertificateDetails as any,
+      Details: CertificateDetails as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(CertificateRequest, {
       priority: 10,
-      Details: CertificateRequestDetails as any,
+      Details: CertificateRequestDetails as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(Issuer, {
       priority: 10,
-      Details: IssuerDetails as any,
+      Details: IssuerDetails as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(ClusterIssuer, {
       priority: 10,
-      Details: ClusterIssuerDetails as any,
+      Details: ClusterIssuerDetails as unknown as DetailsComponent,
     }),
   ];
 
@@ -86,10 +89,10 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
 
   kubeObjectMenuItems: Renderer.LensExtension["kubeObjectMenuItems"] = [
     Renderer.K8sApi.menuItemFor(Certificate, {
-      MenuItem: CertificateForceRenewMenuItem as any,
+      MenuItem: CertificateForceRenewMenuItem as unknown as MenuItemComponent,
     }),
     Renderer.K8sApi.menuItemFor(Certificate, {
-      MenuItem: CertificateDeleteCascadeMenuItem as any,
+      MenuItem: CertificateDeleteCascadeMenuItem as unknown as MenuItemComponent,
     }),
   ];
 

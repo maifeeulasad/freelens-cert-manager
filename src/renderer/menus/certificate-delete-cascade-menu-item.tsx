@@ -12,7 +12,7 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate } from "../../common/api";
+import { Certificate, CertificateStore } from "../../common/api";
 
 interface Props {
   object: Certificate;
@@ -31,11 +31,14 @@ export function CertificateDeleteCascadeMenuItem({ object: cert }: Props) {
       labelOk: "Delete",
       ok: async () => {
         try {
-          const certApi = Certificate.getStore().api as any;
+          const certApi = (Certificate.getStore() as CertificateStore).api;
           await certApi.delete({ name, namespace: ns });
 
           if (secretName) {
-            const secretApi = Renderer.K8sApi.apiManager.getApiByKind("Secret", "v1") as any;
+            const secretApi = Renderer.K8sApi.apiManager.getApiByKind(
+              "Secret",
+              "v1",
+            ) as unknown as Renderer.K8sApi.KubeApi<Renderer.K8sApi.KubeObject>;
             if (secretApi) {
               await secretApi.delete({ name: secretName, namespace: ns });
             }

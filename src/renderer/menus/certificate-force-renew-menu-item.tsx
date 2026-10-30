@@ -15,7 +15,7 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate } from "../../common/api";
+import { Certificate, CertificateStore } from "../../common/api";
 
 interface Props {
   object: Certificate;
@@ -23,7 +23,7 @@ interface Props {
 
 export function CertificateForceRenewMenuItem({ object: cert }: Props) {
   async function handleForceRenew() {
-    const api = Certificate.getStore().api as any;
+    const api = (Certificate.getStore() as CertificateStore).api;
     const ns = cert.getNs();
     const name = cert.getName();
 

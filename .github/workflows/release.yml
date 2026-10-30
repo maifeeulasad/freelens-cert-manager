@@ -1,0 +1,76 @@
+# Author: Maifee Ul Asad <maifeeulasad@gmail.com>
+# Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
+#
+# Release workflow: triggered when a GitHub release is published.
+#
+# Steps:
+#   1. Sync the package.json version to the release tag (e.g. v0.1.2 → 0.1.2)
+#   2. Build (renderer + main bundles via Vite)
+#   3. Pack a .tgz
+#   4. Publish to npm with SLSA provenance attestation
+#   5. Upload the .tgz to the GitHub release as a downloadable asset
+#
+# Required secrets:
+#   NPM_TOKEN — npm access token with publish rights (set in repo Settings → Secrets)
+#
+# Provenance: npm publish --provenance generates a signed SLSA Level 2 attestation
+# using the GitHub Actions OIDC token. Requires id-token: write permission.
+# Ref: https://docs.npmjs.com/generating-provenance-statements
+
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write   # upload .tgz to the GitHub release
+  id-token: write   # OIDC token for npm provenance attestation
+
+jobs:
+  release:
+    name: Build / Pack / Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads pnpm version from packageManager field — do NOT add version: here.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          # Configures .npmrc with the registry and auth token for pnpm publish.
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync package.json version to release tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+        # npm version updates package.json in-place; --no-git-tag-version prevents
+        # it from making a commit or tag. We do NOT push this back to the repo.
+
+      - name: Build (renderer + main)
+        run: pnpm build
+
+      - name: Pack
+        run: pnpm pack
+
+      - name: Publish to npm with provenance
+        run: pnpm publish --provenance --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Attach .tgz to GitHub release
+        run: |
+          TGZ=$(ls *.tgz | head -1)
+          echo "Uploading $TGZ to release ${{ github.event.release.tag_name }}"
+          gh release upload "${{ github.event.release.tag_name }}" "$TGZ" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}

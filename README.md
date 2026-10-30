@@ -6,7 +6,7 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 ## Status
 
-**Phase:** E2E tests done — release packaging pending  
+**Phase:** Release automation wired — publish on next GitHub release tag  
 **Branch:** `main` (no branching until first release)
 
 ---
@@ -83,8 +83,8 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 - [x] GitHub Actions — lint + type-check + unit tests + build (`.github/workflows/ci.yml`)
 - [x] GitHub Actions — E2E on minikube (`medyagh/setup-minikube`)
-- [ ] Pack as `.tgz` and attach to release
-- [ ] Publish to npm under `@freelensapp` scope (or personal scope)
+- [x] Pack as `.tgz` and attach to release (GitHub Actions `release.yml`)
+- [x] Publish to npm as `freelens-cert-manager` with SLSA provenance
 
 ---
 

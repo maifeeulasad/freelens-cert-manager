@@ -24,8 +24,8 @@ on:
     types: [published]
 
 permissions:
-  contents: write   # upload .tgz to the GitHub release
-  id-token: write   # OIDC token for npm provenance attestation
+  contents: write # upload .tgz to the GitHub release
+  id-token: write # OIDC token for npm provenance attestation
 
 jobs:
   release:

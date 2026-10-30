@@ -6,7 +6,7 @@
  * All operations use the current kubeconfig context (set by e2e-setup.sh).
  */
 
-import { execSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 /** Run a kubectl command and return stdout. Throws on non-zero exit. */
 export function kubectl(args: string[]): string {

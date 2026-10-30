@@ -33,13 +33,11 @@ class LensExtensionKubeObject {
   }
 
   static getStore(): never {
-    throw new Error(`Store for ${this.name} is not registered.`);
+    throw new Error(`Store for ${LensExtensionKubeObject.name} is not registered.`);
   }
 }
 
-class ExtensionStore<M extends object> {
-  constructor(_params: { configName: string; defaults: M }) {}
-}
+class ExtensionStore<_M extends object> {}
 
 interface KubeObjectListLayoutProps {
   store: { items: unknown[] };

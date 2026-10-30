@@ -21,7 +21,7 @@ function makeCR(overrides: Record<string, unknown> = {}): CertificateRequest {
       conditions: [{ type: "Ready", status: "True", message: "Certificate issued successfully" }],
     },
     ...overrides,
-  } as any);
+  } as unknown as ConstructorParameters<typeof CertificateRequest>[0]);
 }
 
 describe("CertificateRequest", () => {

@@ -28,7 +28,7 @@ function makeCert(overrides: Record<string, unknown> = {}): Certificate {
       ],
     },
     ...overrides,
-  } as any);
+  } as unknown as ConstructorParameters<typeof Certificate>[0]);
 }
 
 describe("Certificate", () => {

@@ -6,14 +6,19 @@
 import { describe, expect, it } from "vitest";
 import { Issuer } from "./issuer-v1";
 
-function makeIssuer(spec: Record<string, unknown> = {}, statusConditions: any[] = []): Issuer {
+type IssuerCondition = { type: string; status: string; message?: string };
+
+function makeIssuer(
+  spec: Record<string, unknown> = {},
+  statusConditions: IssuerCondition[] = [],
+): Issuer {
   return new Issuer({
     apiVersion: "cert-manager.io/v1",
     kind: "Issuer",
     metadata: { name: "my-issuer", namespace: "default" },
     spec,
     status: { conditions: statusConditions },
-  } as any);
+  } as unknown as ConstructorParameters<typeof Issuer>[0]);
 }
 
 const readyCondition = { type: "Ready", status: "True", message: "Signing CA verified" };

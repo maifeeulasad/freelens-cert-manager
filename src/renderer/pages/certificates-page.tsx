@@ -13,6 +13,7 @@ import {
   type CertificateStatus,
   type CertificateStore,
 } from "../../common/api";
+import { CertHealthSummaryObserver } from "../components/cert-health-summary";
 import { ValidityBar } from "../components/validity-bar";
 import { YamlEditorDialog } from "../components/yaml-editor-dialog";
 import { NotInstalled } from "./not-installed";
@@ -67,6 +68,7 @@ export function CertificatesPage() {
 
   return (
     <>
+      <CertHealthSummaryObserver store={store as unknown as CertificateStore} />
       <Renderer.Component.KubeObjectListLayout<Certificate, CertificateApi>
         store={store}
         isConfigurable

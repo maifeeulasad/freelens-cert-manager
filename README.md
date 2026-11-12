@@ -181,6 +181,9 @@ pnpm pack
 |---|---|---|
 | Author | Maifee Ul Asad | maifeeulasad@gmail.com |
 | Co-Author | Claude Sonnet 4.6 | noreply@anthropic.com |
+| Reviewer | Roberto Bandini ([@robertobandini](https://github.com/robertobandini)) | bandini.roberto@gmail.com |
+
+The feature roadmap (Tiers 1–4) was shaped by Roberto's review in [issue #1](https://github.com/maifeeulasad/freelens-cert-manager/issues/1).
 
 ---
 

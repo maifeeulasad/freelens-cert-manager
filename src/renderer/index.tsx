@@ -19,6 +19,15 @@ type MenuItemComponent =
   Renderer.LensExtension["kubeObjectMenuItems"][number]["components"]["MenuItem"];
 
 import { CertManagerPreferencesStore } from "../common/store";
+import {
+  IconCertificate,
+  IconCertificateRequest,
+  IconCertManager,
+  IconChallenge,
+  IconClusterIssuer,
+  IconIssuer,
+  IconOrder,
+} from "./components/icons";
 import { CertificateDetails } from "./details/certificate-details";
 import { CertificateRequestDetails } from "./details/certificate-request-details";
 import { ChallengeDetails } from "./details/challenge-details";
@@ -175,7 +184,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       id: "cert-manager",
       title: "Cert Manager",
       components: {
-        Icon: () => <span>🔐</span>,
+        Icon: () => <IconCertManager />,
       },
     },
     {
@@ -184,7 +193,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: Certificate.crd.title,
       target: { pageId: "cert-manager-certificates" },
       components: {
-        Icon: () => <span>📜</span>,
+        Icon: () => <IconCertificate />,
       },
     },
     {
@@ -193,7 +202,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: Issuer.crd.title,
       target: { pageId: "cert-manager-issuers" },
       components: {
-        Icon: () => <span>🏛️</span>,
+        Icon: () => <IconIssuer />,
       },
     },
     {
@@ -202,7 +211,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: ClusterIssuer.crd.title,
       target: { pageId: "cert-manager-cluster-issuers" },
       components: {
-        Icon: () => <span>🌐</span>,
+        Icon: () => <IconClusterIssuer />,
       },
     },
     {
@@ -211,7 +220,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: CertificateRequest.crd.title,
       target: { pageId: "cert-manager-certificate-requests" },
       components: {
-        Icon: () => <span>📋</span>,
+        Icon: () => <IconCertificateRequest />,
       },
     },
     {
@@ -220,7 +229,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: Order.crd.title,
       target: { pageId: "cert-manager-orders" },
       components: {
-        Icon: () => <span>🔄</span>,
+        Icon: () => <IconOrder />,
       },
     },
     {
@@ -229,7 +238,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       title: Challenge.crd.title,
       target: { pageId: "cert-manager-challenges" },
       components: {
-        Icon: () => <span>⚡</span>,
+        Icon: () => <IconChallenge />,
       },
     },
   ];

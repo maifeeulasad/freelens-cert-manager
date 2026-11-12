@@ -50,7 +50,8 @@ export function CertificateRequestDetails({ object: cr }: Props) {
   const ownedOrders = getOwnedOrders(cr);
 
   return (
-    <Renderer.Component.DrawerItem name="CertificateRequest Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>CertificateRequest Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="Issuer">
         {spec.issuerRef ? `${spec.issuerRef.kind}/${spec.issuerRef.name}` : "-"}
       </Renderer.Component.DrawerItem>
@@ -107,6 +108,6 @@ export function CertificateRequestDetails({ object: cr }: Props) {
           ))}
         </Renderer.Component.DrawerItem>
       )}
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

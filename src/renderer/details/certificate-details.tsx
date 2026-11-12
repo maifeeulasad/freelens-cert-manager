@@ -59,7 +59,8 @@ export function CertificateDetails({ object: cert }: Props) {
   const ingressUsers = getIngressUsers(spec.secretName, cert.getNs());
 
   return (
-    <Renderer.Component.DrawerItem name="Certificate Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>Certificate Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="Secret Name">
         {spec.secretName ?? "-"}
       </Renderer.Component.DrawerItem>
@@ -127,6 +128,6 @@ export function CertificateDetails({ object: cert }: Props) {
       )}
 
       <X509Details secretName={spec.secretName} namespace={cert.getNs()} />
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

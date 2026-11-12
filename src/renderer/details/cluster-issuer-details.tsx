@@ -21,7 +21,8 @@ export function ClusterIssuerDetails({ object: issuer }: Props) {
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
 
   return (
-    <Renderer.Component.DrawerItem name="ClusterIssuer Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>ClusterIssuer Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="Type">
         {getClusterIssuerType(issuer)}
       </Renderer.Component.DrawerItem>
@@ -35,6 +36,6 @@ export function ClusterIssuerDetails({ object: issuer }: Props) {
       {readyMessage && (
         <Renderer.Component.DrawerItem name="Message">{readyMessage}</Renderer.Component.DrawerItem>
       )}
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

@@ -17,7 +17,8 @@ export function ChallengeDetails({ object: challenge }: Props) {
   const status = getChallengeStatus(challenge);
 
   return (
-    <Renderer.Component.DrawerItem name="Challenge Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>Challenge Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="State">
         {acmeStateLabel(status.state)}
       </Renderer.Component.DrawerItem>
@@ -54,6 +55,6 @@ export function ChallengeDetails({ object: challenge }: Props) {
       {status.reason && (
         <Renderer.Component.DrawerItem name="Reason">{status.reason}</Renderer.Component.DrawerItem>
       )}
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

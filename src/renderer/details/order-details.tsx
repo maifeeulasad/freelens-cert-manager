@@ -44,7 +44,8 @@ export function OrderDetails({ object: order }: Props) {
   const ownedChallenges = getOwnedChallenges(order);
 
   return (
-    <Renderer.Component.DrawerItem name="Order Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>Order Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="State">
         {acmeStateLabel(status.state)}
       </Renderer.Component.DrawerItem>
@@ -117,6 +118,6 @@ export function OrderDetails({ object: order }: Props) {
           ))}
         </Renderer.Component.DrawerItem>
       )}
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

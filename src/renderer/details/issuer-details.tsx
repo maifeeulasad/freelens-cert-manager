@@ -17,7 +17,8 @@ export function IssuerDetails({ object: issuer }: Props) {
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
 
   return (
-    <Renderer.Component.DrawerItem name="Issuer Details" labelsOnly>
+    <>
+      <Renderer.Component.DrawerTitle>Issuer Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="Type">
         {getIssuerType(issuer)}
       </Renderer.Component.DrawerItem>
@@ -29,6 +30,6 @@ export function IssuerDetails({ object: issuer }: Props) {
       {readyMessage && (
         <Renderer.Component.DrawerItem name="Message">{readyMessage}</Renderer.Component.DrawerItem>
       )}
-    </Renderer.Component.DrawerItem>
+    </>
   );
 }

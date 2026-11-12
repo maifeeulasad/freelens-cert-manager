@@ -5,5 +5,7 @@
 
 export * from "./certificate-request-v1";
 export * from "./certificate-v1";
+export * from "./challenge-v1";
 export * from "./cluster-issuer-v1";
 export * from "./issuer-v1";
+export * from "./order-v1";

@@ -13,14 +13,19 @@
 import type { Renderer } from "@freelensapp/extensions";
 
 import type {
+  AcmeState,
   CertificateRequestSpec,
   CertificateRequestStatus,
   CertificateSpec,
   CertificateStatus,
+  ChallengeSpec,
+  ChallengeStatus,
   ClusterIssuerSpec,
   ClusterIssuerStatus,
   IssuerSpec,
   IssuerStatus,
+  OrderSpec,
+  OrderStatus,
 } from ".";
 
 type AnyObj = Renderer.K8sApi.KubeObject;
@@ -124,4 +129,55 @@ export function isCertReqApproved(obj: AnyObj): boolean {
   return (getCertReqStatus(obj).conditions ?? []).some(
     (c) => c.type === "Approved" && c.status === "True",
   );
+}
+
+// ── Shared ACME helpers ───────────────────────────────────────────────────────
+
+export function acmeStateLabel(state: AcmeState | undefined): string {
+  switch (state) {
+    case "valid":
+      return "✓ Valid";
+    case "ready":
+      return "✓ Ready";
+    case "pending":
+      return "⏳ Pending";
+    case "processing":
+      return "⏳ Processing";
+    case "invalid":
+      return "✗ Invalid";
+    case "expired":
+      return "✗ Expired";
+    case "errored":
+      return "✗ Error";
+    default:
+      return state ?? "-";
+  }
+}
+
+// ── Order ─────────────────────────────────────────────────────────────────────
+
+export function getOrderSpec(obj: AnyObj): OrderSpec {
+  return rawSpec<OrderSpec>(obj);
+}
+
+export function getOrderStatus(obj: AnyObj): OrderStatus {
+  return rawStatus<OrderStatus>(obj);
+}
+
+export function isOrderValid(obj: AnyObj): boolean {
+  return getOrderStatus(obj).state === "valid";
+}
+
+// ── Challenge ─────────────────────────────────────────────────────────────────
+
+export function getChallengeSpec(obj: AnyObj): ChallengeSpec {
+  return rawSpec<ChallengeSpec>(obj);
+}
+
+export function getChallengeStatus(obj: AnyObj): ChallengeStatus {
+  return rawStatus<ChallengeStatus>(obj);
+}
+
+export function isChallengeValid(obj: AnyObj): boolean {
+  return getChallengeStatus(obj).state === "valid";
 }

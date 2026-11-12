@@ -4,7 +4,14 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate, CertificateRequest, ClusterIssuer, Issuer } from "../common/api";
+import {
+  Certificate,
+  CertificateRequest,
+  Challenge,
+  ClusterIssuer,
+  Issuer,
+  Order,
+} from "../common/api";
 
 type DetailsComponent =
   Renderer.LensExtension["kubeObjectDetailItems"][number]["components"]["Details"];
@@ -14,18 +21,26 @@ type MenuItemComponent =
 import { CertManagerPreferencesStore } from "../common/store";
 import { CertificateDetails } from "./details/certificate-details";
 import { CertificateRequestDetails } from "./details/certificate-request-details";
+import { ChallengeDetails } from "./details/challenge-details";
 import { ClusterIssuerDetails } from "./details/cluster-issuer-details";
 import { IssuerDetails } from "./details/issuer-details";
+import { OrderDetails } from "./details/order-details";
 import { CertificateDeleteCascadeMenuItem } from "./menus/certificate-delete-cascade-menu-item";
 import { CertificateEditMenuItem } from "./menus/certificate-edit-menu-item";
 import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
 import { CertificateRequestEditMenuItem } from "./menus/certificate-request-edit-menu-item";
+import { ChallengeDeleteStuckMenuItem } from "./menus/challenge-delete-stuck-menu-item";
+import { ChallengeEditMenuItem } from "./menus/challenge-edit-menu-item";
 import { ClusterIssuerEditMenuItem } from "./menus/cluster-issuer-edit-menu-item";
 import { IssuerEditMenuItem } from "./menus/issuer-edit-menu-item";
+import { OrderDeleteStuckMenuItem } from "./menus/order-delete-stuck-menu-item";
+import { OrderEditMenuItem } from "./menus/order-edit-menu-item";
 import { CertificateRequestsPage } from "./pages/certificate-requests-page";
 import { CertificatesPage } from "./pages/certificates-page";
+import { ChallengesPage } from "./pages/challenges-page";
 import { ClusterIssuersPage } from "./pages/cluster-issuers-page";
 import { IssuersPage } from "./pages/issuers-page";
+import { OrdersPage } from "./pages/orders-page";
 import {
   CertManagerPreferenceHint,
   CertManagerPreferenceInput,
@@ -36,7 +51,7 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     CertManagerPreferencesStore.getInstanceOrCreate().loadExtension(this);
   }
 
-  customResources = [Certificate, CertificateRequest, Issuer, ClusterIssuer];
+  customResources = [Certificate, CertificateRequest, Issuer, ClusterIssuer, Order, Challenge];
 
   kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [
     Renderer.K8sApi.detailsFor(Certificate, {
@@ -54,6 +69,14 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     Renderer.K8sApi.detailsFor(ClusterIssuer, {
       priority: 10,
       Details: ClusterIssuerDetails as unknown as DetailsComponent,
+    }),
+    Renderer.K8sApi.detailsFor(Order, {
+      priority: 10,
+      Details: OrderDetails as unknown as DetailsComponent,
+    }),
+    Renderer.K8sApi.detailsFor(Challenge, {
+      priority: 10,
+      Details: ChallengeDetails as unknown as DetailsComponent,
     }),
   ];
 
@@ -80,6 +103,18 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       id: "cert-manager-certificate-requests",
       components: {
         Page: () => <CertificateRequestsPage />,
+      },
+    },
+    {
+      id: "cert-manager-orders",
+      components: {
+        Page: () => <OrdersPage />,
+      },
+    },
+    {
+      id: "cert-manager-challenges",
+      components: {
+        Page: () => <ChallengesPage />,
       },
     },
   ];
@@ -112,6 +147,18 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     }),
     Renderer.K8sApi.menuItemFor(CertificateRequest, {
       MenuItem: CertificateRequestEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Order, {
+      MenuItem: OrderEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Order, {
+      MenuItem: OrderDeleteStuckMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Challenge, {
+      MenuItem: ChallengeEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(Challenge, {
+      MenuItem: ChallengeDeleteStuckMenuItem as unknown as MenuItemComponent,
     }),
   ];
 
@@ -157,6 +204,24 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
       target: { pageId: "cert-manager-certificate-requests" },
       components: {
         Icon: () => <span>📋</span>,
+      },
+    },
+    {
+      id: "cert-manager-orders",
+      parentId: "cert-manager",
+      title: Order.crd.title,
+      target: { pageId: "cert-manager-orders" },
+      components: {
+        Icon: () => <span>🔄</span>,
+      },
+    },
+    {
+      id: "cert-manager-challenges",
+      parentId: "cert-manager",
+      title: Challenge.crd.title,
+      target: { pageId: "cert-manager-challenges" },
+      components: {
+        Icon: () => <span>⚡</span>,
       },
     },
   ];

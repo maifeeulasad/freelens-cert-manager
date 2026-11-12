@@ -15,6 +15,23 @@ interface Props {
   object: Certificate;
 }
 
+function getIngressUsers(secretName: string | undefined, ns: string | undefined) {
+  if (!secretName) return [];
+  try {
+    const store = Renderer.K8sApi.ingressStore;
+    return store.items.filter((ing) => {
+      const raw = ing as unknown as {
+        spec?: { tls?: Array<{ secretName?: string }> };
+        metadata?: { namespace?: string };
+      };
+      if (raw.metadata?.namespace !== ns) return false;
+      return (raw.spec?.tls ?? []).some((t) => t.secretName === secretName);
+    });
+  } catch {
+    return [];
+  }
+}
+
 function getOwnedCertReqs(cert: Certificate) {
   try {
     const store = CertificateRequest.getStore() as CertificateRequestStore;
@@ -38,6 +55,7 @@ export function CertificateDetails({ object: cert }: Props) {
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
   const dnsNames = spec.dnsNames ?? [];
   const ownedCRs = getOwnedCertReqs(cert);
+  const ingressUsers = getIngressUsers(spec.secretName, cert.getNs());
 
   return (
     <Renderer.Component.DrawerItem name="Certificate Details" labelsOnly>
@@ -98,6 +116,12 @@ export function CertificateDetails({ object: cert }: Props) {
               selfLink={certReqSelfLink(cr.getNs() ?? "", cr.getName())}
             />
           ))}
+        </Renderer.Component.DrawerItem>
+      )}
+
+      {ingressUsers.length > 0 && (
+        <Renderer.Component.DrawerItem name="Used by Ingresses">
+          {ingressUsers.map((ing) => ing.getName()).join(", ")}
         </Renderer.Component.DrawerItem>
       )}
     </Renderer.Component.DrawerItem>

@@ -8,6 +8,7 @@ import { CertificateRequest } from "../../common/api";
 import { getCertSpec, getCertStatus, isCertReady } from "../../common/api/accessors";
 import { certReqSelfLink, ResourceLink } from "../components/resource-link";
 import { ValidityBarDetail } from "../components/validity-bar";
+import { X509Details } from "../components/x509-details";
 
 import type { Certificate, CertificateRequestStore } from "../../common/api";
 
@@ -124,6 +125,8 @@ export function CertificateDetails({ object: cert }: Props) {
           {ingressUsers.map((ing) => ing.getName()).join(", ")}
         </Renderer.Component.DrawerItem>
       )}
+
+      <X509Details secretName={spec.secretName} namespace={cert.getNs()} />
     </Renderer.Component.DrawerItem>
   );
 }

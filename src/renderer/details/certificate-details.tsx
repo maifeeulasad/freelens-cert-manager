@@ -4,13 +4,31 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
+import { CertificateRequest } from "../../common/api";
 import { getCertSpec, getCertStatus, isCertReady } from "../../common/api/accessors";
+import { certReqSelfLink, ResourceLink } from "../components/resource-link";
 import { ValidityBarDetail } from "../components/validity-bar";
 
-import type { Certificate } from "../../common/api";
+import type { Certificate, CertificateRequestStore } from "../../common/api";
 
 interface Props {
   object: Certificate;
+}
+
+function getOwnedCertReqs(cert: Certificate) {
+  try {
+    const store = CertificateRequest.getStore() as CertificateRequestStore;
+    return store.items.filter((cr) => {
+      const raw = cr as unknown as {
+        metadata?: { ownerReferences?: Array<{ kind: string; name: string }> };
+      };
+      return (raw.metadata?.ownerReferences ?? []).some(
+        (r) => r.kind === "Certificate" && r.name === cert.getName(),
+      );
+    });
+  } catch {
+    return [];
+  }
 }
 
 export function CertificateDetails({ object: cert }: Props) {
@@ -19,6 +37,7 @@ export function CertificateDetails({ object: cert }: Props) {
   const ready = isCertReady(cert);
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
   const dnsNames = spec.dnsNames ?? [];
+  const ownedCRs = getOwnedCertReqs(cert);
 
   return (
     <Renderer.Component.DrawerItem name="Certificate Details" labelsOnly>
@@ -68,6 +87,18 @@ export function CertificateDetails({ object: cert }: Props) {
 
       {readyMessage && (
         <Renderer.Component.DrawerItem name="Message">{readyMessage}</Renderer.Component.DrawerItem>
+      )}
+
+      {ownedCRs.length > 0 && (
+        <Renderer.Component.DrawerItem name="Certificate Requests">
+          {ownedCRs.map((cr) => (
+            <ResourceLink
+              key={cr.getName()}
+              label={cr.getName()}
+              selfLink={certReqSelfLink(cr.getNs() ?? "", cr.getName())}
+            />
+          ))}
+        </Renderer.Component.DrawerItem>
       )}
     </Renderer.Component.DrawerItem>
   );

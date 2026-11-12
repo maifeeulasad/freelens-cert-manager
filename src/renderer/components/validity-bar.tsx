@@ -4,7 +4,7 @@
  *
  * Visual validity bar for TLS certificates.
  * Shows a colored progress bar representing how much of the cert's lifetime
- * has elapsed, plus a human-readable days-remaining label.
+ * remains (full = healthy, empty = expiring/expired), plus a days-remaining label.
  *
  * Color thresholds (days remaining):
  *   > 30 days  → green   (#66bb6a)
@@ -22,12 +22,13 @@ function daysRemaining(notAfter: string): number {
   return Math.floor((new Date(notAfter).getTime() - Date.now()) / 86_400_000);
 }
 
-function pctElapsed(notBefore: string | undefined, notAfter: string): number {
+function pctRemaining(notBefore: string | undefined, notAfter: string): number {
   const end = new Date(notAfter).getTime();
-  const start = notBefore ? new Date(notBefore).getTime() : end - 90 * 86_400_000; // fallback: assume 90-day cert
+  const start = notBefore ? new Date(notBefore).getTime() : end - 90 * 86_400_000;
   const total = end - start;
-  if (total <= 0) return 100;
-  return Math.min(100, Math.max(0, ((Date.now() - start) / total) * 100));
+  if (total <= 0) return 0;
+  const remaining = end - Date.now();
+  return Math.min(100, Math.max(0, (remaining / total) * 100));
 }
 
 function barColor(days: number): string {
@@ -46,7 +47,7 @@ export function ValidityBar({ notBefore, notAfter }: Props) {
   if (!notAfter) return <span>-</span>;
 
   const days = daysRemaining(notAfter);
-  const pct = pctElapsed(notBefore, notAfter);
+  const pct = pctRemaining(notBefore, notAfter);
   const color = barColor(days);
   const label = expiryLabel(days);
 
@@ -79,7 +80,7 @@ export function ValidityBarDetail({ notBefore, notAfter }: Props) {
   if (!notAfter) return <span>-</span>;
 
   const days = daysRemaining(notAfter);
-  const pct = pctElapsed(notBefore, notAfter);
+  const pct = pctRemaining(notBefore, notAfter);
   const color = barColor(days);
   const label = expiryLabel(days);
 

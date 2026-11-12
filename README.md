@@ -12,14 +12,14 @@ A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing 
 
 All six cert-manager resource types are registered and listed in the sidebar under **Cert Manager**:
 
-| Resource | Group | Sidebar icon |
-|---|---|---|
-| Certificate | cert-manager.io/v1 | Green shield |
-| CertificateRequest | cert-manager.io/v1 | Blue document |
-| Issuer | cert-manager.io/v1 | Amber columns |
-| ClusterIssuer | cert-manager.io/v1 | Purple globe |
-| Order | acme.cert-manager.io/v1 | Teal circular arrow |
-| Challenge | acme.cert-manager.io/v1 | Red lightning bolt |
+| Resource           | Group                   | Sidebar icon        |
+| ------------------ | ----------------------- | ------------------- |
+| Certificate        | cert-manager.io/v1      | Green shield        |
+| CertificateRequest | cert-manager.io/v1      | Blue document       |
+| Issuer             | cert-manager.io/v1      | Amber columns       |
+| ClusterIssuer      | cert-manager.io/v1      | Purple globe        |
+| Order              | acme.cert-manager.io/v1 | Teal circular arrow |
+| Challenge          | acme.cert-manager.io/v1 | Red lightning bolt  |
 
 Each resource has a list page, a detail drawer, and context menu actions.
 
@@ -41,11 +41,11 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### Certificate context menu
 
-| Action | Description |
-|---|---|
-| Force Renew | Patches `cert-manager.io/trigger-renew` annotation (shows confirmation dialog with namespace) |
-| Delete (cascade) | Deletes the Certificate and its managed Secret |
-| Edit YAML | Opens the resource in an inline YAML editor |
+| Action           | Description                                                                                   |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| Force Renew      | Patches `cert-manager.io/trigger-renew` annotation (shows confirmation dialog with namespace) |
+| Delete (cascade) | Deletes the Certificate and its managed Secret                                                |
+| Edit YAML        | Opens the resource in an inline YAML editor                                                   |
 
 ---
 
@@ -57,11 +57,11 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### CertificateRequest context menu
 
-| Action | Description |
-|---|---|
-| Approve | Calls `PUT .../approval` with an Approved condition (hidden once decided) |
-| Deny | Calls `PUT .../approval` with a Denied condition (hidden once decided) |
-| Edit YAML | Opens the resource in an inline YAML editor |
+| Action    | Description                                                               |
+| --------- | ------------------------------------------------------------------------- |
+| Approve   | Calls `PUT .../approval` with an Approved condition (hidden once decided) |
+| Deny      | Calls `PUT .../approval` with a Denied condition (hidden once decided)    |
+| Edit YAML | Opens the resource in an inline YAML editor                               |
 
 ---
 
@@ -73,10 +73,10 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### Order context menu
 
-| Action | Description |
-|---|---|
+| Action         | Description                                                    |
+| -------------- | -------------------------------------------------------------- |
 | Delete (stuck) | Deletes a non-valid Order so cert-manager retries from scratch |
-| Edit YAML | Opens the resource in an inline YAML editor |
+| Edit YAML      | Opens the resource in an inline YAML editor                    |
 
 ---
 
@@ -86,10 +86,10 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### Challenge context menu
 
-| Action | Description |
-|---|---|
+| Action         | Description                                               |
+| -------------- | --------------------------------------------------------- |
 | Delete (stuck) | Deletes a non-valid Challenge so the parent Order retries |
-| Edit YAML | Opens the resource in an inline YAML editor |
+| Edit YAML      | Opens the resource in an inline YAML editor               |
 
 ---
 
@@ -126,16 +126,16 @@ freelens-cert-manager
 
 ## Architecture decisions
 
-| Decision | Rationale |
-|---|---|
-| Freelens v2 extension API | Current stable host version |
-| Vite two-mode build | Required by Freelens v2 (renderer ESM-only, main Node) |
-| MobX 7 standard decorators | Host ships MobX 7; legacy decorators break silently |
-| React 19 | Host-provided singleton; must not be bundled |
-| pnpm | Matches Freelens example extension toolchain |
-| Biome | Linter/formatter used by freelensapp org |
-| @peculiar/x509 | Browser-compatible X.509 parser (Node crypto blocked in renderer) |
-| Raw-data accessors | Freelens creates KubeObject instances from its own base class, not our subclasses — prototype getters are unreachable at runtime, so spec/status are read via direct property access |
+| Decision                   | Rationale                                                                                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Freelens v2 extension API  | Current stable host version                                                                                                                                                          |
+| Vite two-mode build        | Required by Freelens v2 (renderer ESM-only, main Node)                                                                                                                               |
+| MobX 7 standard decorators | Host ships MobX 7; legacy decorators break silently                                                                                                                                  |
+| React 19                   | Host-provided singleton; must not be bundled                                                                                                                                         |
+| pnpm                       | Matches Freelens example extension toolchain                                                                                                                                         |
+| Biome                      | Linter/formatter used by freelensapp org                                                                                                                                             |
+| @peculiar/x509             | Browser-compatible X.509 parser (Node crypto blocked in renderer)                                                                                                                    |
+| Raw-data accessors         | Freelens creates KubeObject instances from its own base class, not our subclasses — prototype getters are unreachable at runtime, so spec/status are read via direct property access |
 
 ---
 
@@ -168,20 +168,20 @@ pnpm pack
 
 ## Documentation
 
-| File | Purpose |
-|---|---|
-| [`docs/understanding-cert-manager.md`](docs/understanding-cert-manager.md) | kubectl + cmctl command reference for cert-manager |
+| File                                                                         | Purpose                                                          |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`docs/understanding-cert-manager.md`](docs/understanding-cert-manager.md)   | kubectl + cmctl command reference for cert-manager               |
 | [`docs/extension-development-guide.md`](docs/extension-development-guide.md) | Freelens v2 extension API — structure, contracts, build, testing |
 
 ---
 
 ## Contributors
 
-| Role | Name | Contact |
-|---|---|---|
-| Author | Maifee Ul Asad | maifeeulasad@gmail.com |
-| Co-Author | Claude Sonnet 4.6 | noreply@anthropic.com |
-| Reviewer | Roberto Bandini ([@robertobandini](https://github.com/robertobandini)) | bandini.roberto@gmail.com |
+| Role      | Name                                                                   | Contact                   |
+| --------- | ---------------------------------------------------------------------- | ------------------------- |
+| Author    | Maifee Ul Asad                                                         | maifeeulasad@gmail.com    |
+| Co-Author | Claude Sonnet 4.6                                                      | noreply@anthropic.com     |
+| Reviewer  | Roberto Bandini ([@robertobandini](https://github.com/robertobandini)) | bandini.roberto@gmail.com |
 
 The feature roadmap (Tiers 1–4) was shaped by Roberto's review in [issue #1](https://github.com/maifeeulasad/freelens-cert-manager/issues/1).
 

@@ -28,6 +28,8 @@ import { OrderDetails } from "./details/order-details";
 import { CertificateDeleteCascadeMenuItem } from "./menus/certificate-delete-cascade-menu-item";
 import { CertificateEditMenuItem } from "./menus/certificate-edit-menu-item";
 import { CertificateForceRenewMenuItem } from "./menus/certificate-force-renew-menu-item";
+import { CertificateRequestApproveMenuItem } from "./menus/certificate-request-approve-menu-item";
+import { CertificateRequestDenyMenuItem } from "./menus/certificate-request-deny-menu-item";
 import { CertificateRequestEditMenuItem } from "./menus/certificate-request-edit-menu-item";
 import { ChallengeDeleteStuckMenuItem } from "./menus/challenge-delete-stuck-menu-item";
 import { ChallengeEditMenuItem } from "./menus/challenge-edit-menu-item";
@@ -144,6 +146,12 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     }),
     Renderer.K8sApi.menuItemFor(ClusterIssuer, {
       MenuItem: ClusterIssuerEditMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(CertificateRequest, {
+      MenuItem: CertificateRequestApproveMenuItem as unknown as MenuItemComponent,
+    }),
+    Renderer.K8sApi.menuItemFor(CertificateRequest, {
+      MenuItem: CertificateRequestDenyMenuItem as unknown as MenuItemComponent,
     }),
     Renderer.K8sApi.menuItemFor(CertificateRequest, {
       MenuItem: CertificateRequestEditMenuItem as unknown as MenuItemComponent,

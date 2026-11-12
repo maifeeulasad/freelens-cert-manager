@@ -14,8 +14,8 @@ import {
   type CertificateStore,
 } from "../../common/api";
 import { CertHealthSummaryObserver } from "../components/cert-health-summary";
+import { CertificateWizardDialog } from "../components/certificate-wizard-dialog";
 import { ValidityBar } from "../components/validity-bar";
-import { YamlEditorDialog } from "../components/yaml-editor-dialog";
 import { NotInstalled } from "./not-installed";
 
 function certSpec(obj: Renderer.K8sApi.KubeObject): CertificateSpec {
@@ -30,23 +30,8 @@ function certIsReady(obj: Renderer.K8sApi.KubeObject): boolean {
   return (certStatus(obj).conditions ?? []).some((c) => c.type === "Ready" && c.status === "True");
 }
 
-const CERT_TEMPLATE = `apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: my-certificate
-  namespace: default
-spec:
-  secretName: my-certificate-tls
-  issuerRef:
-    name: selfsigned-issuer
-    kind: Issuer
-  dnsNames:
-    - example.com
-`;
-
 export function CertificatesPage() {
-  const [createOpen, setCreateOpen] = useState(false);
-  const [createYaml, setCreateYaml] = useState(CERT_TEMPLATE);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
   let store: ReturnType<typeof Certificate.getStore<Certificate>>;
   try {
@@ -63,7 +48,7 @@ export function CertificatesPage() {
       { name: String(meta?.name ?? ""), namespace: String(meta?.namespace ?? "default") },
       data as Parameters<typeof api.create>[1],
     );
-    setCreateOpen(false);
+    setWizardOpen(false);
   }
 
   return (
@@ -93,20 +78,14 @@ export function CertificatesPage() {
           ];
         }}
         addRemoveButtons={{
-          onAdd: () => {
-            setCreateYaml(CERT_TEMPLATE);
-            setCreateOpen(true);
-          },
+          onAdd: () => setWizardOpen(true),
           addTooltip: "Create Certificate",
         }}
       />
-      <YamlEditorDialog
-        isOpen={createOpen}
-        title="Create Certificate"
-        value={createYaml}
-        onChange={setCreateYaml}
-        onClose={() => setCreateOpen(false)}
-        onSave={handleCreate}
+      <CertificateWizardDialog
+        isOpen={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        onSubmit={handleCreate}
       />
     </>
   );

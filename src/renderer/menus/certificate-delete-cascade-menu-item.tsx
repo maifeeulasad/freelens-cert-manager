@@ -29,8 +29,8 @@ export function CertificateDeleteCascadeMenuItem({ object: cert }: Props) {
 
     Renderer.Component.ConfirmDialog.open({
       message: secretName
-        ? `Delete Certificate "${name}" and its managed Secret "${secretName}"?`
-        : `Delete Certificate "${name}"?`,
+        ? `Delete Certificate "${name}" in namespace "${ns}" and its managed Secret "${secretName}"?`
+        : `Delete Certificate "${name}" in namespace "${ns}"?`,
       labelOk: "Delete",
       ok: async () => {
         try {

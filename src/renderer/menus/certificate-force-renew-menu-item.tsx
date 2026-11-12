@@ -24,26 +24,32 @@ interface Props {
 }
 
 export function CertificateForceRenewMenuItem({ object: cert }: Props) {
-  async function handleForceRenew() {
-    const api = (Certificate.getStore() as CertificateStore).api;
+  function handleForceRenew() {
     const ns = cert.getNs();
     const name = cert.getName();
 
-    try {
-      await api.patch(
-        { name, namespace: ns },
-        {
-          metadata: {
-            annotations: {
-              "cert-manager.io/trigger-renew": new Date().toISOString(),
+    Renderer.Component.ConfirmDialog.open({
+      message: `Force-renew Certificate "${name}" in namespace "${ns}"?\n\ncert-manager will immediately begin issuing a replacement certificate.`,
+      labelOk: "Force Renew",
+      ok: async () => {
+        try {
+          const api = (Certificate.getStore() as CertificateStore).api;
+          await api.patch(
+            { name, namespace: ns },
+            {
+              metadata: {
+                annotations: {
+                  "cert-manager.io/trigger-renew": new Date().toISOString(),
+                },
+              },
             },
-          },
-        },
-        "merge",
-      );
-    } catch (err) {
-      console.error(`[cert-manager] force renew failed for ${ns}/${name}:`, err);
-    }
+            "merge",
+          );
+        } catch (err) {
+          console.error(`[cert-manager] force renew failed for ${ns}/${name}:`, err);
+        }
+      },
+    });
   }
 
   return (

@@ -5,6 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { getCertSpec, getCertStatus, isCertReady } from "../../common/api/accessors";
+import { ValidityBarDetail } from "../components/validity-bar";
 
 import type { Certificate } from "../../common/api";
 
@@ -43,6 +44,10 @@ export function CertificateDetails({ object: cert }: Props) {
 
       <Renderer.Component.DrawerItem name="Renew Before">
         {spec.renewBefore ?? "-"}
+      </Renderer.Component.DrawerItem>
+
+      <Renderer.Component.DrawerItem name="Validity">
+        <ValidityBarDetail notBefore={status.notBefore} notAfter={status.notAfter} />
       </Renderer.Component.DrawerItem>
 
       <Renderer.Component.DrawerItem name="Not Before">

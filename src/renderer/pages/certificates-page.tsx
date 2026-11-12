@@ -13,6 +13,7 @@ import {
   type CertificateStatus,
   type CertificateStore,
 } from "../../common/api";
+import { ValidityBar } from "../components/validity-bar";
 import { YamlEditorDialog } from "../components/yaml-editor-dialog";
 import { NotInstalled } from "./not-installed";
 
@@ -76,15 +77,19 @@ export function CertificatesPage() {
           { title: "Namespace", className: "namespace" },
           { title: "Ready", className: "ready" },
           { title: "Secret", className: "secret" },
-          { title: "Expires", className: "expiry" },
+          { title: "Validity", className: "expiry" },
         ]}
-        renderTableContents={(cert) => [
-          cert.getName(),
-          cert.getNs(),
-          certIsReady(cert) ? "✓" : "✗",
-          certSpec(cert).secretName ?? "-",
-          certStatus(cert).notAfter ?? "-",
-        ]}
+        renderTableContents={(cert) => {
+          const spec = certSpec(cert);
+          const status = certStatus(cert);
+          return [
+            cert.getName(),
+            cert.getNs(),
+            certIsReady(cert) ? "✓" : "✗",
+            spec.secretName ?? "-",
+            <ValidityBar key="validity" notBefore={status.notBefore} notAfter={status.notAfter} />,
+          ];
+        }}
         addRemoveButtons={{
           onAdd: () => {
             setCreateYaml(CERT_TEMPLATE);

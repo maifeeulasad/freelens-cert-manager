@@ -5,8 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { dump, load } from "js-yaml";
-import { useState } from "react";
-import { YamlEditorDialog } from "../components/yaml-editor-dialog";
+import { openYamlEditorDialog } from "../components/open-yaml-editor-dialog";
 
 interface Props {
   object: Renderer.K8sApi.KubeObject;
@@ -29,34 +28,19 @@ function toEditYaml(obj: Renderer.K8sApi.KubeObject): string {
 }
 
 export function ResourceEditYamlMenuItem({ object, api }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [yaml, setYaml] = useState("");
-
   function open() {
-    setYaml(toEditYaml(object));
-    setIsOpen(true);
+    openYamlEditorDialog({
+      title: `Edit ${object.getName()}`,
+      initialValue: toEditYaml(object),
+      onSave: async (yamlStr) => {
+        const data = load(yamlStr) as Record<string, unknown>;
+        await api.update(
+          { name: object.getName(), namespace: object.getNs() ?? "" },
+          data as Parameters<typeof api.update>[1],
+        );
+      },
+    });
   }
 
-  async function onSave(yamlStr: string) {
-    const data = load(yamlStr) as Record<string, unknown>;
-    await api.update(
-      { name: object.getName(), namespace: object.getNs() ?? "" },
-      data as Parameters<typeof api.update>[1],
-    );
-    setIsOpen(false);
-  }
-
-  return (
-    <>
-      <Renderer.Component.MenuItem onClick={open}>Edit YAML</Renderer.Component.MenuItem>
-      <YamlEditorDialog
-        isOpen={isOpen}
-        title={`Edit ${object.getName()}`}
-        value={yaml}
-        onChange={setYaml}
-        onClose={() => setIsOpen(false)}
-        onSave={onSave}
-      />
-    </>
-  );
+  return <Renderer.Component.MenuItem onClick={open}>Edit YAML</Renderer.Component.MenuItem>;
 }

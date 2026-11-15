@@ -4,14 +4,11 @@
  *
  * "Force Renew" context menu item for Certificate resources.
  *
- * cert-manager does not have a direct API call for forced renewal; the
- * canonical approach is to delete the managed Secret so cert-manager reissues
- * it, OR to add/toggle the annotation
- * `cert-manager.io/issuer-name` on the Certificate — but the most reliable
- * in-cluster trigger is bumping the `cert-manager.io/trigger-renew` annotation
- * with a timestamp, which the controller watches.
+ * Mirrors what `cmctl renew` does: PUT the status subresource with an
+ * "Issuing" condition (status=True, reason=ManuallyTriggered). This signals
+ * cert-manager's trigger controller to begin re-issuance immediately.
  *
- * Ref: https://cert-manager.io/docs/usage/certificate/#triggering-certificate-renewal-manually
+ * Ref: cert-manager pkg/ctl/renew.go — UpdateStatus path
  */
 
 import { Renderer } from "@freelensapp/extensions";
@@ -34,17 +31,37 @@ export function CertificateForceRenewMenuItem({ object: cert }: Props) {
       ok: async () => {
         try {
           const api = (Certificate.getStore() as CertificateStore).api;
-          await api.patch(
-            { name, namespace: ns },
-            {
-              metadata: {
-                annotations: {
-                  "cert-manager.io/trigger-renew": new Date().toISOString(),
+          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal KubeApi methods not in public types
+          const baseUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
+
+          // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access
+          const rawCert = cert as any;
+          const existingConditions = (
+            (rawCert.status?.conditions ?? []) as Array<{ type: string }>
+          ).filter((c: { type: string }) => c.type !== "Issuing");
+
+          const body = {
+            apiVersion: "cert-manager.io/v1",
+            kind: "Certificate",
+            metadata: rawCert.metadata,
+            status: {
+              ...rawCert.status,
+              conditions: [
+                ...existingConditions,
+                {
+                  type: "Issuing",
+                  status: "True",
+                  reason: "ManuallyTriggered",
+                  message: `Certificate "${name}" re-issuance manually triggered.`,
+                  lastTransitionTime: new Date().toISOString(),
+                  observedGeneration: rawCert.metadata?.generation ?? 0,
                 },
-              },
+              ],
             },
-            "merge",
-          );
+          };
+
+          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — status subresource PUT
+          await (api as any).put(`${baseUrl}/status`, { data: body });
         } catch (err) {
           console.error(`[cert-manager] force renew failed for ${ns}/${name}:`, err);
         }

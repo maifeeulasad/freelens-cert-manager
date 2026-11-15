@@ -51,7 +51,7 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### CertificateRequest detail drawer
 
-- Issuer, Duration, Is CA, Usages, approval/denial status, failure time.
+- Issuer, Duration, Is CA, Usages, failure time.
 - **Parent Certificate link** — click to open the owning Certificate in the drawer.
 - **Owned Orders** — clickable links to Orders issued for this CR.
 
@@ -86,10 +86,10 @@ Each resource has a list page, a detail drawer, and context menu actions.
 
 ### Challenge context menu
 
-| Action         | Description                                               |
-| -------------- | --------------------------------------------------------- |
-| Delete (stuck) | Deletes a non-valid Challenge so the parent Order retries |
-| Edit YAML      | Opens the resource in an inline YAML editor               |
+| Action         | Description                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Delete (stuck) | Deletes a non-valid Challenge so the parent Order retries; warns if the solver pod may leave the Challenge in Terminating |
+| Edit YAML      | Opens the resource in an inline YAML editor                                                                               |
 
 ---
 

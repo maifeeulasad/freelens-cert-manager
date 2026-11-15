@@ -3,10 +3,10 @@
  * Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
  *
  * "Deny" menu item for CertificateRequests.
- * Calls the cert-manager approval subresource:
- *   PUT /apis/cert-manager.io/v1/namespaces/{ns}/certificaterequests/{name}/approval
- * with the full CR body including a "Denied" condition in status.conditions.
+ * PUTs the status subresource with a "Denied" condition (status=True).
  * Only shown when the CR has not yet been approved or denied.
+ *
+ * Ref: cert-manager API — CertificateRequest approval via status subresource
  */
 
 import { Renderer } from "@freelensapp/extensions";
@@ -34,13 +34,15 @@ export function CertificateRequestDenyMenuItem({ object: cr }: Props) {
       ok: async () => {
         try {
           const api = (CertificateRequest.getStore() as CertificateRequestStore).api;
-          // biome-ignore lint/suspicious/noExplicitAny: formatUrlForNotListing and put are Freelens internal KubeApi methods not in public types
-          const resourceUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
-          // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access — will be replaced when fixing approve/deny in issue #2
+          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal KubeApi methods not in public types
+          const baseUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
+
+          // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access
           const rawCr = cr as any;
           const existingConditions = (
             (rawCr.status?.conditions ?? []) as Array<{ type: string }>
-          ).filter((c) => c.type !== "Approved" && c.type !== "Denied");
+          ).filter((c: { type: string }) => c.type !== "Approved" && c.type !== "Denied");
+
           const body = {
             apiVersion: "cert-manager.io/v1",
             kind: "CertificateRequest",
@@ -60,8 +62,9 @@ export function CertificateRequestDenyMenuItem({ object: cr }: Props) {
               ],
             },
           };
-          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — see above
-          await (api as any).put(`${resourceUrl}/approval`, { data: body });
+
+          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — status subresource PUT
+          await (api as any).put(`${baseUrl}/status`, { data: body });
         } catch (err) {
           console.error(
             `[cert-manager] deny CertificateRequest failed for ${cr.getNs()}/${cr.getName()}:`,

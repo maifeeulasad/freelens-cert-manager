@@ -21,6 +21,7 @@ type MenuItemComponent =
   Renderer.LensExtension["kubeObjectMenuItems"][number]["components"]["MenuItem"];
 
 import { CertManagerPreferencesStore } from "../common/store";
+import { ErrorBoundary } from "./components/error-boundary";
 import {
   IconCertificate,
   IconCertificateRequest,
@@ -69,27 +70,51 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
   kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [
     Renderer.K8sApi.detailsFor(Certificate, {
       priority: 10,
-      Details: CertificateDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof CertificateDetails>[0]) => (
+        <ErrorBoundary name="CertificateDetails">
+          <CertificateDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(CertificateRequest, {
       priority: 10,
-      Details: CertificateRequestDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof CertificateRequestDetails>[0]) => (
+        <ErrorBoundary name="CertificateRequestDetails">
+          <CertificateRequestDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(Issuer, {
       priority: 10,
-      Details: IssuerDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof IssuerDetails>[0]) => (
+        <ErrorBoundary name="IssuerDetails">
+          <IssuerDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(ClusterIssuer, {
       priority: 10,
-      Details: ClusterIssuerDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof ClusterIssuerDetails>[0]) => (
+        <ErrorBoundary name="ClusterIssuerDetails">
+          <ClusterIssuerDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(Order, {
       priority: 10,
-      Details: OrderDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof OrderDetails>[0]) => (
+        <ErrorBoundary name="OrderDetails">
+          <OrderDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
     Renderer.K8sApi.detailsFor(Challenge, {
       priority: 10,
-      Details: ChallengeDetails as unknown as DetailsComponent,
+      Details: ((p: Parameters<typeof ChallengeDetails>[0]) => (
+        <ErrorBoundary name="ChallengeDetails">
+          <ChallengeDetails {...p} />
+        </ErrorBoundary>
+      )) as unknown as DetailsComponent,
     }),
   ];
 
@@ -97,37 +122,61 @@ export default class CertManagerRenderer extends Renderer.LensExtension {
     {
       id: "cert-manager-certificates",
       components: {
-        Page: () => <CertificatesPage />,
+        Page: () => (
+          <ErrorBoundary name="CertificatesPage">
+            <CertificatesPage />
+          </ErrorBoundary>
+        ),
       },
     },
     {
       id: "cert-manager-issuers",
       components: {
-        Page: () => <IssuersPage />,
+        Page: () => (
+          <ErrorBoundary name="IssuersPage">
+            <IssuersPage />
+          </ErrorBoundary>
+        ),
       },
     },
     {
       id: "cert-manager-cluster-issuers",
       components: {
-        Page: () => <ClusterIssuersPage />,
+        Page: () => (
+          <ErrorBoundary name="ClusterIssuersPage">
+            <ClusterIssuersPage />
+          </ErrorBoundary>
+        ),
       },
     },
     {
       id: "cert-manager-certificate-requests",
       components: {
-        Page: () => <CertificateRequestsPage />,
+        Page: () => (
+          <ErrorBoundary name="CertificateRequestsPage">
+            <CertificateRequestsPage />
+          </ErrorBoundary>
+        ),
       },
     },
     {
       id: "cert-manager-orders",
       components: {
-        Page: () => <OrdersPage />,
+        Page: () => (
+          <ErrorBoundary name="OrdersPage">
+            <OrdersPage />
+          </ErrorBoundary>
+        ),
       },
     },
     {
       id: "cert-manager-challenges",
       components: {
-        Page: () => <ChallengesPage />,
+        Page: () => (
+          <ErrorBoundary name="ChallengesPage">
+            <ChallengesPage />
+          </ErrorBoundary>
+        ),
       },
     },
   ];

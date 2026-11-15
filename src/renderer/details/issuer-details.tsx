@@ -4,7 +4,7 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { getIssuerStatus, getIssuerType, isIssuerReady } from "../../common/api/accessors";
+import { getIssuerStatus, getIssuerType } from "../../common/api/accessors";
 
 import type { Issuer } from "../../common/api";
 
@@ -21,10 +21,6 @@ export function IssuerDetails({ object: issuer }: Props) {
       <Renderer.Component.DrawerTitle>Issuer Details</Renderer.Component.DrawerTitle>
       <Renderer.Component.DrawerItem name="Type">
         {getIssuerType(issuer)}
-      </Renderer.Component.DrawerItem>
-
-      <Renderer.Component.DrawerItem name="Status">
-        {isIssuerReady(issuer) ? "✓ Ready" : "✗ Not Ready"}
       </Renderer.Component.DrawerItem>
 
       {readyMessage && (

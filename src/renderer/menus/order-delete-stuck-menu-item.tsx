@@ -43,6 +43,8 @@ export function OrderDeleteStuckMenuItem({ object: order }: Props) {
   }
 
   return (
-    <Renderer.Component.MenuItem onClick={handleDelete}>Delete (stuck)</Renderer.Component.MenuItem>
+    <Renderer.Component.MenuItem icon="delete_forever" onClick={handleDelete}>
+      Delete (stuck)
+    </Renderer.Component.MenuItem>
   );
 }

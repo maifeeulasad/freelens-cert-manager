@@ -4,11 +4,7 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import {
-  getClusterIssuerStatus,
-  getClusterIssuerType,
-  isClusterIssuerReady,
-} from "../../common/api/accessors";
+import { getClusterIssuerStatus, getClusterIssuerType } from "../../common/api/accessors";
 
 import type { ClusterIssuer } from "../../common/api";
 
@@ -28,10 +24,6 @@ export function ClusterIssuerDetails({ object: issuer }: Props) {
       </Renderer.Component.DrawerItem>
 
       <Renderer.Component.DrawerItem name="Scope">Cluster-wide</Renderer.Component.DrawerItem>
-
-      <Renderer.Component.DrawerItem name="Status">
-        {isClusterIssuerReady(issuer) ? "✓ Ready" : "✗ Not Ready"}
-      </Renderer.Component.DrawerItem>
 
       {readyMessage && (
         <Renderer.Component.DrawerItem name="Message">{readyMessage}</Renderer.Component.DrawerItem>

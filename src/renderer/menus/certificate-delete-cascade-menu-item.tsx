@@ -54,7 +54,7 @@ export function CertificateDeleteCascadeMenuItem({ object: cert }: Props) {
   }
 
   return (
-    <Renderer.Component.MenuItem onClick={handleDeleteCascade}>
+    <Renderer.Component.MenuItem icon="delete_sweep" onClick={handleDeleteCascade}>
       Delete (cascade)
     </Renderer.Component.MenuItem>
   );

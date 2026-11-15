@@ -29,20 +29,29 @@ export function ChallengeDeleteStuckMenuItem({ object: challenge }: Props) {
     const name = challenge.getName();
 
     Renderer.Component.ConfirmDialog.open({
-      message: `Delete stuck Challenge "${name}" in namespace "${ns}" (state: ${acmeStateLabel(state)})?\n\nThe parent Order will retry issuance.`,
+      message:
+        `Delete stuck Challenge "${name}" in namespace "${ns}" (state: ${acmeStateLabel(state)})?\n\n` +
+        `The parent Order will retry issuance.\n\n` +
+        `⚠ If the ACME solver pod is still running, the Challenge may get stuck in Terminating ` +
+        `because cert-manager cannot remove its finalizer. ` +
+        `Check the cert-manager controller logs if deletion does not complete within a minute.`,
       labelOk: "Delete",
       ok: async () => {
         try {
           const api = (Challenge.getStore() as ChallengeStore).api;
           await api.delete({ name, namespace: ns });
         } catch (err) {
-          console.error(`[cert-manager] delete Challenge failed for ${ns}/${name}:`, err);
+          Renderer.Component.Notifications.error(
+            `Failed to delete Challenge "${ns}/${name}": ${err instanceof Error ? err.message : String(err)}`,
+          );
         }
       },
     });
   }
 
   return (
-    <Renderer.Component.MenuItem onClick={handleDelete}>Delete (stuck)</Renderer.Component.MenuItem>
+    <Renderer.Component.MenuItem icon="delete_forever" onClick={handleDelete}>
+      Delete (stuck)
+    </Renderer.Component.MenuItem>
   );
 }

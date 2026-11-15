@@ -70,7 +70,7 @@ export function CertificateForceRenewMenuItem({ object: cert }: Props) {
   }
 
   return (
-    <Renderer.Component.MenuItem onClick={handleForceRenew}>
+    <Renderer.Component.MenuItem icon="autorenew" onClick={handleForceRenew}>
       Force Renew
     </Renderer.Component.MenuItem>
   );

@@ -5,13 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { Order } from "../../common/api";
-import {
-  getCertReqSpec,
-  getCertReqStatus,
-  isCertReqApproved,
-  isCertReqDenied,
-  isCertReqReady,
-} from "../../common/api/accessors";
+import { getCertReqSpec, getCertReqStatus } from "../../common/api/accessors";
 import {
   certSelfLink,
   getOwnerRef,
@@ -69,14 +63,6 @@ export function CertificateRequestDetails({ object: cr }: Props) {
           {usages.join(", ")}
         </Renderer.Component.DrawerItem>
       )}
-
-      <Renderer.Component.DrawerItem name="Status">
-        {isCertReqReady(cr) ? "✓ Ready" : isCertReqDenied(cr) ? "✗ Denied" : "⏳ Pending"}
-      </Renderer.Component.DrawerItem>
-
-      <Renderer.Component.DrawerItem name="Approved">
-        {isCertReqApproved(cr) ? "Yes" : "No"}
-      </Renderer.Component.DrawerItem>
 
       {status.failureTime && (
         <Renderer.Component.DrawerItem name="Failed At">

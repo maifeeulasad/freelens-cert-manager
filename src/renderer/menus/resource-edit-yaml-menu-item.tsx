@@ -38,5 +38,9 @@ export function ResourceEditYamlMenuItem({ object, api }: Props) {
     });
   }
 
-  return <Renderer.Component.MenuItem onClick={open}>Edit YAML</Renderer.Component.MenuItem>;
+  return (
+    <Renderer.Component.MenuItem icon="edit" onClick={open}>
+      Edit YAML
+    </Renderer.Component.MenuItem>
+  );
 }

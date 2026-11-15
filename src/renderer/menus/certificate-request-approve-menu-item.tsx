@@ -75,5 +75,9 @@ export function CertificateRequestApproveMenuItem({ object: cr }: Props) {
     });
   }
 
-  return <Renderer.Component.MenuItem onClick={handleApprove}>Approve</Renderer.Component.MenuItem>;
+  return (
+    <Renderer.Component.MenuItem icon="check_circle" onClick={handleApprove}>
+      Approve
+    </Renderer.Component.MenuItem>
+  );
 }

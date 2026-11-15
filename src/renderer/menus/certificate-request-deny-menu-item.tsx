@@ -75,5 +75,9 @@ export function CertificateRequestDenyMenuItem({ object: cr }: Props) {
     });
   }
 
-  return <Renderer.Component.MenuItem onClick={handleDeny}>Deny</Renderer.Component.MenuItem>;
+  return (
+    <Renderer.Component.MenuItem icon="cancel" onClick={handleDeny}>
+      Deny
+    </Renderer.Component.MenuItem>
+  );
 }

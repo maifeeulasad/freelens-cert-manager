@@ -6,7 +6,7 @@
 import { Renderer } from "@freelensapp/extensions";
 import { useEffect, useState } from "react";
 import { CertificateRequest } from "../../common/api";
-import { getCertSpec, getCertStatus, isCertReady } from "../../common/api/accessors";
+import { getCertSpec, getCertStatus } from "../../common/api/accessors";
 import { certReqSelfLink, ResourceLink } from "../components/resource-link";
 import { ValidityBarDetail } from "../components/validity-bar";
 import { X509Details } from "../components/x509-details";
@@ -52,7 +52,6 @@ function getOwnedCertReqs(cert: Certificate) {
 export function CertificateDetails({ object: cert }: Props) {
   const spec = getCertSpec(cert);
   const status = getCertStatus(cert);
-  const ready = isCertReady(cert);
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
   const dnsNames = spec.dnsNames ?? [];
   const ownedCRs = getOwnedCertReqs(cert);
@@ -106,10 +105,6 @@ export function CertificateDetails({ object: cert }: Props) {
 
       <Renderer.Component.DrawerItem name="Renewal Time">
         {status.renewalTime ?? "-"}
-      </Renderer.Component.DrawerItem>
-
-      <Renderer.Component.DrawerItem name="Status">
-        {ready ? "✓ Ready" : "✗ Not Ready"}
       </Renderer.Component.DrawerItem>
 
       {readyMessage && (

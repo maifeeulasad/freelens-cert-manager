@@ -86,7 +86,7 @@ export function CertHealthSummary({ store }: Props) {
         flexWrap: "wrap",
       }}
     >
-      <Tile value={total} label="Total" color="var(--colorTextPrimary, #fff)" />
+      <Tile value={total} label="Total" color="var(--colorTextPrimary, currentColor)" />
       <Tile value={ready} label="Ready" color="#66bb6a" />
       {notReady > 0 && <Tile value={notReady} label="Not Ready" color="#ef5350" />}
       {expiringSoon > 0 && <Tile value={expiringSoon} label="Expiring" color="#ffa726" />}

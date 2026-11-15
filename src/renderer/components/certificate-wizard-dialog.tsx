@@ -9,7 +9,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { dump } from "js-yaml";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Fields {
   name: string;
@@ -151,17 +151,37 @@ export function CertificateWizardDialog({ isOpen, onClose, onSubmit, defaultName
     }
   }
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     setStep(1);
     setError(null);
     onClose();
-  }
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, handleClose]);
 
   const generatedYaml = buildYaml(fields);
   const isValid = Boolean(fields.name && fields.namespace && fields.issuerName);
 
   return (
-    <Renderer.Component.Dialog isOpen={isOpen} onClose={handleClose} modal pinned>
+    <Renderer.Component.Dialog isOpen={isOpen} onClose={handleClose} modal>
+      {/* Explicit backdrop — Freelens Dialog doesn't add one inside extensions */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.55)",
+          zIndex: -1,
+        }}
+        onClick={handleClose}
+        aria-hidden="true"
+      />
       <div
         style={{
           display: "flex",

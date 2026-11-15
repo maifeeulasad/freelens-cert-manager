@@ -4,6 +4,7 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
+import { useEffect, useState } from "react";
 import { CertificateRequest } from "../../common/api";
 import { getCertSpec, getCertStatus, isCertReady } from "../../common/api/accessors";
 import { certReqSelfLink, ResourceLink } from "../components/resource-link";
@@ -16,16 +17,15 @@ interface Props {
   object: Certificate;
 }
 
-function getIngressUsers(secretName: string | undefined, ns: string | undefined) {
-  if (!secretName) return [];
+async function loadIngressUsers(secretName: string, ns: string) {
   try {
     const store = Renderer.K8sApi.ingressStore;
+    await store.loadAll({ namespaces: [ns] });
     return store.items.filter((ing) => {
       const raw = ing as unknown as {
         spec?: { tls?: Array<{ secretName?: string }> };
-        metadata?: { namespace?: string };
       };
-      if (raw.metadata?.namespace !== ns) return false;
+      if (ing.getNs() !== ns) return false;
       return (raw.spec?.tls ?? []).some((t) => t.secretName === secretName);
     });
   } catch {
@@ -56,7 +56,14 @@ export function CertificateDetails({ object: cert }: Props) {
   const readyMessage = (status.conditions ?? []).find((c) => c.type === "Ready")?.message;
   const dnsNames = spec.dnsNames ?? [];
   const ownedCRs = getOwnedCertReqs(cert);
-  const ingressUsers = getIngressUsers(spec.secretName, cert.getNs());
+
+  const [ingressUsers, setIngressUsers] = useState<Array<{ getName: () => string }>>([]);
+  useEffect(() => {
+    const secretName = spec.secretName;
+    const ns = cert.getNs();
+    if (!secretName || !ns) return;
+    loadIngressUsers(secretName, ns).then(setIngressUsers);
+  }, [spec.secretName, cert]);
 
   return (
     <>

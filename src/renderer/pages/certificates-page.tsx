@@ -16,6 +16,7 @@ import {
 import { CertHealthSummaryObserver } from "../components/cert-health-summary";
 import { CertificateWizardDialog } from "../components/certificate-wizard-dialog";
 import { ValidityBar } from "../components/validity-bar";
+import { YamlEditorDialogHost } from "../components/yaml-editor-dialog-host";
 import { NotInstalled } from "./not-installed";
 
 function certSpec(obj: Renderer.K8sApi.KubeObject): CertificateSpec {
@@ -87,6 +88,7 @@ export function CertificatesPage() {
         onClose={() => setWizardOpen(false)}
         onSubmit={handleCreate}
       />
+      <YamlEditorDialogHost />
     </>
   );
 }

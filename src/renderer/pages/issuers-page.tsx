@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Issuer, type IssuerApi, type IssuerStore } from "../../common/api";
 import { getIssuerType, isIssuerReady } from "../../common/api/accessors";
 import { YamlEditorDialog } from "../components/yaml-editor-dialog";
+import { YamlEditorDialogHost } from "../components/yaml-editor-dialog-host";
 import { NotInstalled } from "./not-installed";
 
 const ISSUER_TEMPLATE = `apiVersion: cert-manager.io/v1
@@ -77,6 +78,7 @@ export function IssuersPage() {
         onClose={() => setCreateOpen(false)}
         onSave={handleCreate}
       />
+      <YamlEditorDialogHost />
     </>
   );
 }

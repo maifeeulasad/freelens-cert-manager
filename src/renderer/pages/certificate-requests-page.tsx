@@ -18,6 +18,7 @@ import {
   isCertReqReady,
 } from "../../common/api/accessors";
 import { YamlEditorDialog } from "../components/yaml-editor-dialog";
+import { YamlEditorDialogHost } from "../components/yaml-editor-dialog-host";
 import { NotInstalled } from "./not-installed";
 
 const CERT_REQUEST_TEMPLATE = `apiVersion: cert-manager.io/v1
@@ -95,6 +96,7 @@ export function CertificateRequestsPage() {
         onClose={() => setCreateOpen(false)}
         onSave={handleCreate}
       />
+      <YamlEditorDialogHost />
     </>
   );
 }

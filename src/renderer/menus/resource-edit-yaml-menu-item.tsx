@@ -5,7 +5,7 @@
 
 import { Renderer } from "@freelensapp/extensions";
 import { dump, load } from "js-yaml";
-import { openYamlEditorDialog } from "../components/open-yaml-editor-dialog";
+import { yamlEditorStore } from "../stores/yaml-editor-store";
 
 interface Props {
   object: Renderer.K8sApi.KubeObject;
@@ -29,16 +29,12 @@ function toEditYaml(obj: Renderer.K8sApi.KubeObject): string {
 
 export function ResourceEditYamlMenuItem({ object, api }: Props) {
   function open() {
-    openYamlEditorDialog({
-      title: `Edit ${object.getName()}`,
-      initialValue: toEditYaml(object),
-      onSave: async (yamlStr) => {
-        const data = load(yamlStr) as Record<string, unknown>;
-        await api.update(
-          { name: object.getName(), namespace: object.getNs() ?? "" },
-          data as Parameters<typeof api.update>[1],
-        );
-      },
+    yamlEditorStore.open(`Edit ${object.getName()}`, toEditYaml(object), async (yamlStr) => {
+      const data = load(yamlStr) as Record<string, unknown>;
+      await api.update(
+        { name: object.getName(), namespace: object.getNs() ?? "" },
+        data as Parameters<typeof api.update>[1],
+      );
     });
   }
 

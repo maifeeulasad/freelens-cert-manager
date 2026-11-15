@@ -9,6 +9,7 @@ import { useState } from "react";
 import { ClusterIssuer, type ClusterIssuerApi, type ClusterIssuerStore } from "../../common/api";
 import { getClusterIssuerType, isClusterIssuerReady } from "../../common/api/accessors";
 import { YamlEditorDialog } from "../components/yaml-editor-dialog";
+import { YamlEditorDialogHost } from "../components/yaml-editor-dialog-host";
 import { NotInstalled } from "./not-installed";
 
 const CLUSTER_ISSUER_TEMPLATE = `apiVersion: cert-manager.io/v1
@@ -71,6 +72,7 @@ export function ClusterIssuersPage() {
         onClose={() => setCreateOpen(false)}
         onSave={handleCreate}
       />
+      <YamlEditorDialogHost />
     </>
   );
 }

@@ -24,18 +24,14 @@ async function parseSecret(secretName: string, namespace: string): Promise<X509I
   try {
     const store = Renderer.K8sApi.secretsStore;
     // Find from cached store first; fall back to API fetch
-    let secret = store.items.find(
-      (s) => s.getName() === secretName && (s as any).metadata?.namespace === namespace,
-    );
+    let secret = store.items.find((s) => s.getName() === secretName && s.getNs() === namespace);
     if (!secret) {
       await store.loadAll({ namespaces: [namespace] });
-      secret = store.items.find(
-        (s) => s.getName() === secretName && (s as any).metadata?.namespace === namespace,
-      );
+      secret = store.items.find((s) => s.getName() === secretName && s.getNs() === namespace);
     }
     if (!secret) return null;
 
-    const rawData = (secret as any).data as Record<string, string> | undefined;
+    const rawData = (secret as unknown as { data?: Record<string, string> }).data;
     const tlsCrt = rawData?.["tls.crt"];
     if (!tlsCrt) return null;
 
@@ -51,8 +47,9 @@ async function parseSecret(secretName: string, namespace: string): Promise<X509I
     // Key algorithm string
     const alg = cert.publicKey.algorithm;
     let keyAlgorithm = alg.name;
-    if ("namedCurve" in alg) keyAlgorithm = `${alg.name} (${(alg as any).namedCurve})`;
-    else if ("modulusLength" in alg) keyAlgorithm = `${alg.name}-${(alg as any).modulusLength}`;
+    if ("namedCurve" in alg) keyAlgorithm = `${alg.name} (${(alg as EcKeyAlgorithm).namedCurve})`;
+    else if ("modulusLength" in alg)
+      keyAlgorithm = `${alg.name}-${(alg as RsaKeyAlgorithm).modulusLength}`;
 
     // SANs
     const sanExt = cert.getExtension("2.5.29.17");

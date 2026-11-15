@@ -133,9 +133,5 @@ export function IconOrder() {
 
 /** ⚡ Challenge — lightning bolt */
 export function IconChallenge() {
-  return icon(
-    <>
-      <polygon points="9,1 4,9 8.5,9 7,15 12,7 7.5,7" fill="#ef5350" />
-    </>,
-  );
+  return icon(<polygon points="9,1 4,9 8.5,9 7,15 12,7 7.5,7" fill="#ef5350" />);
 }

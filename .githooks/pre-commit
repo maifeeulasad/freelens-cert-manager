@@ -1,0 +1,3 @@
+#!/bin/sh
+# Run lint before every commit — fail fast if there are lint errors.
+pnpm lint:check

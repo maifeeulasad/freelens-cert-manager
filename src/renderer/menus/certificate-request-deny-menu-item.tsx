@@ -34,7 +34,9 @@ export function CertificateRequestDenyMenuItem({ object: cr }: Props) {
       ok: async () => {
         try {
           const api = (CertificateRequest.getStore() as CertificateRequestStore).api;
+          // biome-ignore lint/suspicious/noExplicitAny: formatUrlForNotListing and put are Freelens internal KubeApi methods not in public types
           const resourceUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
+          // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access — will be replaced when fixing approve/deny in issue #2
           const rawCr = cr as any;
           const existingConditions = (
             (rawCr.status?.conditions ?? []) as Array<{ type: string }>
@@ -58,6 +60,7 @@ export function CertificateRequestDenyMenuItem({ object: cr }: Props) {
               ],
             },
           };
+          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — see above
           await (api as any).put(`${resourceUrl}/approval`, { data: body });
         } catch (err) {
           console.error(

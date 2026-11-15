@@ -35,13 +35,9 @@ async function parseSecret(secretName: string, namespace: string): Promise<X509I
     const tlsCrt = rawData?.["tls.crt"];
     if (!tlsCrt) return null;
 
-    // Decode base64 → DER
-    const binary = atob(tlsCrt);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-
-    // Parse the first certificate in the chain
-    const pem = `-----BEGIN CERTIFICATE-----\n${tlsCrt}\n-----END CERTIFICATE-----`;
+    // tls.crt is base64(PEM) — decode once to get the PEM text, then parse.
+    // Do NOT re-wrap in PEM headers: that would double-encode the data.
+    const pem = atob(tlsCrt);
     const cert = new X509Certificate(pem);
 
     // Key algorithm string
@@ -63,8 +59,8 @@ async function parseSecret(secretName: string, namespace: string): Promise<X509I
       }
     }
 
-    // SHA-256 fingerprint via SubtleCrypto
-    const hashBuf = await crypto.subtle.digest("SHA-256", bytes);
+    // SHA-256 fingerprint — cert.rawData is the DER-encoded certificate bytes
+    const hashBuf = await crypto.subtle.digest("SHA-256", cert.rawData);
     const hashArr = Array.from(new Uint8Array(hashBuf));
     const fingerprint = hashArr
       .map((b) => b.toString(16).padStart(2, "0"))

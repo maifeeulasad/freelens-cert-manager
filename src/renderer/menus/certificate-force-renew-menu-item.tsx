@@ -12,9 +12,8 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { Certificate } from "../../common/api";
 
-import type { CertificateStore } from "../../common/api";
+import type { Certificate } from "../../common/api";
 
 interface Props {
   object: Certificate;
@@ -30,9 +29,9 @@ export function CertificateForceRenewMenuItem({ object: cert }: Props) {
       labelOk: "Force Renew",
       ok: async () => {
         try {
-          const api = (Certificate.getStore() as CertificateStore).api;
-          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal KubeApi methods not in public types
-          const baseUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
+          const cluster = Renderer.Catalog.getActiveCluster();
+          if (!cluster) throw new Error("No active cluster");
+          const api = Renderer.K8sApi.KubeJsonApi.forCluster(cluster.id);
 
           // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access
           const rawCert = cert as any;
@@ -60,10 +59,13 @@ export function CertificateForceRenewMenuItem({ object: cert }: Props) {
             },
           };
 
-          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — status subresource PUT
-          await (api as any).put(`${baseUrl}/status`, { data: body });
+          await api.put(`/apis/cert-manager.io/v1/namespaces/${ns}/certificates/${name}/status`, {
+            data: body,
+          });
         } catch (err) {
-          console.error(`[cert-manager] force renew failed for ${ns}/${name}:`, err);
+          Renderer.Component.Notifications.error(
+            `Failed to force-renew Certificate "${ns}/${name}": ${err instanceof Error ? err.message : String(err)}`,
+          );
         }
       },
     });

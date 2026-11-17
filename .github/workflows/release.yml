@@ -26,6 +26,7 @@ on:
 permissions:
   contents: write # upload .tgz to the GitHub release
   id-token: write # OIDC token for npm provenance attestation
+  attestations: write # GitHub supply-chain attestation for the .tgz
 
 jobs:
   release:
@@ -74,6 +75,11 @@ jobs:
           }
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "*.tgz"
 
       - name: Attach .tgz to GitHub release
         run: |

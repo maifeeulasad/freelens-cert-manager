@@ -3,6 +3,12 @@
 A [Freelens](https://github.com/freelensapp/freelens) v2 extension for managing [cert-manager](https://cert-manager.io/) resources directly from your Kubernetes dashboard.
 
 [![Latest release](https://img.shields.io/github/v/release/maifeeulasad/freelens-cert-manager)](https://github.com/maifeeulasad/freelens-cert-manager/releases/latest)
+[![CI](https://github.com/maifeeulasad/freelens-cert-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/maifeeulasad/freelens-cert-manager/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/maifeeulasad/freelens-cert-manager/actions/workflows/codeql.yml/badge.svg)](https://github.com/maifeeulasad/freelens-cert-manager/actions/workflows/codeql.yml)
+[![npm downloads](https://img.shields.io/npm/dm/freelens-cert-manager)](https://www.npmjs.com/package/freelens-cert-manager)
+[![GitHub Downloads](https://img.shields.io/github/downloads/maifeeulasad/freelens-cert-manager/total)](https://github.com/maifeeulasad/freelens-cert-manager/releases)
+[![npm provenance](https://img.shields.io/badge/npm-provenance%20✓-brightgreen)](https://www.npmjs.com/package/freelens-cert-manager)
+[![GitHub Attestation](https://img.shields.io/badge/GitHub-attestation%20✓-blue)](https://github.com/maifeeulasad/freelens-cert-manager/attestations)
 
 ---
 
@@ -177,12 +183,13 @@ pnpm pack
 
 ## Contributors
 
-| Role      | Name                                                                   | Contact                     |
-| --------- | ---------------------------------------------------------------------- | --------------------------- |
-| Author    | Maifee Ul Asad                                                         | maifeeulasad@gmail.com      |
-| Co-Author | Claude Sonnet 4.6                                                      | noreply@anthropic.com       |
-| Co-Author | Qwen-3.7-Plus                                                          | qwen-coder@alibabacloud.com |
-| Reviewer  | Roberto Bandini ([@robertobandini](https://github.com/robertobandini)) | bandini.roberto@gmail.com   |
+| Role      | Name                                                                   | Contact                                              |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------- |
+| Author    | Maifee Ul Asad                                                         | [@maifeeulasad](https://github.com/maifeeulasad)     |
+| Co-Author | Claude Sonnet 4.6                                                      | noreply@anthropic.com                                |
+| Co-Author | [GitHub Copilot](https://github.com/features/copilot)                  | copilot@github.com                                   |
+| Co-Author | Qwen-3.7-Plus                                                          | qwen-coder@alibabacloud.com                          |
+| Reviewer  | Roberto Bandini ([@robertobandini](https://github.com/robertobandini)) | [@robertobandini](https://github.com/robertobandini) |
 
 The feature roadmap (Tiers 1–4) was shaped by Roberto's review in [issue #1](https://github.com/maifeeulasad/freelens-cert-manager/issues/1).
 

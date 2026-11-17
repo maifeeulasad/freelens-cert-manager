@@ -1,6 +1,7 @@
 /**
  * Author: Maifee Ul Asad <maifeeulasad@gmail.com>
  * Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
+ * Co-Author: GitHub Copilot <copilot@github.com>
  *
  * "Force Renew" context menu item for Certificate resources.
  *

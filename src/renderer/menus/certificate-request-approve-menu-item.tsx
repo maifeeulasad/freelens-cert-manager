@@ -1,6 +1,7 @@
 /**
  * Author: Maifee Ul Asad <maifeeulasad@gmail.com>
  * Co-Author: Claude Sonnet 4.6 <noreply@anthropic.com>
+ * Co-Author: GitHub Copilot <copilot@github.com>
  *
  * "Approve" menu item for CertificateRequests.
  * PUTs the status subresource with an "Approved" condition (status=True).
@@ -10,10 +11,9 @@
  */
 
 import { Renderer } from "@freelensapp/extensions";
-import { CertificateRequest } from "../../common/api";
 import { isCertReqApproved, isCertReqDenied } from "../../common/api/accessors";
 
-import type { CertificateRequestStore } from "../../common/api";
+import type { CertificateRequest } from "../../common/api";
 
 interface Props {
   object: CertificateRequest;
@@ -33,9 +33,9 @@ export function CertificateRequestApproveMenuItem({ object: cr }: Props) {
       labelOk: "Approve",
       ok: async () => {
         try {
-          const api = (CertificateRequest.getStore() as CertificateRequestStore).api;
-          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal KubeApi methods not in public types
-          const baseUrl = (api as any).formatUrlForNotListing({ name, namespace: ns });
+          const cluster = Renderer.Catalog.getActiveCluster();
+          if (!cluster) throw new Error("No active cluster");
+          const api = Renderer.K8sApi.KubeJsonApi.forCluster(cluster.id);
 
           // biome-ignore lint/suspicious/noExplicitAny: raw KubeObject property access
           const rawCr = cr as any;
@@ -63,12 +63,13 @@ export function CertificateRequestApproveMenuItem({ object: cr }: Props) {
             },
           };
 
-          // biome-ignore lint/suspicious/noExplicitAny: Freelens internal API — status subresource PUT
-          await (api as any).put(`${baseUrl}/status`, { data: body });
+          await api.put(
+            `/apis/cert-manager.io/v1/namespaces/${ns}/certificaterequests/${name}/status`,
+            { data: body },
+          );
         } catch (err) {
-          console.error(
-            `[cert-manager] approve CertificateRequest failed for ${cr.getNs()}/${cr.getName()}:`,
-            err,
+          Renderer.Component.Notifications.error(
+            `Failed to approve CertificateRequest "${ns}/${name}": ${err instanceof Error ? err.message : String(err)}`,
           );
         }
       },
